@@ -1,0 +1,6 @@
+{
+  "name": "School Website & Portals",
+  "description": "A comprehensive, high-fidelity academy website featuring unified student, staff, and admin portals tracking real-time attendance, customizable quizzes, dynamic grade analytics, and an interactive school event calendar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
