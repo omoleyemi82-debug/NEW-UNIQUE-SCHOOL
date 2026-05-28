@@ -79,6 +79,7 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
     { id: 'users', label: 'Student & Staff Roster', icon: Users },
     { id: 'courses', label: 'Manage Classrooms', icon: BookOpen },
     { id: 'events', label: 'Calendar Scheduling', icon: Calendar },
+    { id: 'quiz', label: 'CBT & Exam Manager', icon: Zap },
     { id: 'billing', label: 'School Fee Config', icon: CreditCard }
   ];
 

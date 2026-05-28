@@ -3,17 +3,16 @@ import { BookOpen, Book, ChevronRight, GraduationCap, Layers } from 'lucide-reac
 
 export default function AcademicsPage({ onSearchClick }: { onSearchClick?: () => void }) {
   const departments = [
-    { name: 'Mathematics', head: 'Mr. David Vance (M.Sc.)', courses: 'General Arithmetic, Algebra, Advanced AP Calculus BC, Matrices' },
-    { name: 'Sciences', head: 'Dr. Sarah Jenkins (Ph.D.)', courses: 'General Science, Molecular Biology, Biochemistry, Physics' },
-    { name: 'Language & English Literature', head: 'Mrs. Emily Cole (M.A.)', courses: 'Creative Writing, Poetry, Debating, World Literature' },
-    { name: 'Humanities & Civics', head: 'Mr. Richard Thorne (M.A.)', courses: 'World History, Social Civil Treaties, Demographics, Rhetoric' }
+    { name: 'Science Department', head: 'Mrs. Emily Cole (B.Sc., Ed.)', courses: 'General Biology, Chemistry, Physics, Mathematics, Geography, Agricultural Science, Computer Studies' },
+    { name: 'Art Department', head: 'Mr. Richard Thorne (B.A.)', courses: 'Literature-in-English, Government, History, Visual Fine Arts, Civic Education, Language Studies' },
+    { name: 'Commerce Department', head: 'Mr. David Vance (B.Sc., Economics)', courses: 'Financial Accounting, Commerce, Economics, Business Studies, Office Practice, Commerce Lab Activities' }
   ];
 
   const books = [
-    { title: 'The Principles of Genetics (8th Ed)', author: 'Sarah Jenkins', type: 'Biology' },
-    { title: 'Matrices & Vector Algebra Foundations', author: 'David Vance', type: 'Mathematics' },
-    { title: 'A Short History of African & World Treaties', author: 'Richard Thorne', type: 'Civics' },
-    { title: 'Classical Rhetoric & Argumentation Guide', author: 'Emily Cole', type: 'Literature' }
+    { title: 'New School Biology for Senior Secondary', author: 'Emily Cole', type: 'Science' },
+    { title: 'Essential Mathematics for Secondary Schools', author: 'David Vance', type: 'Science/Commerce' },
+    { title: 'Adventures in Literature-in-English', author: 'Richard Thorne', type: 'Art' },
+    { title: 'Fundamentals of Financial Accounting', author: 'David Vance', type: 'Commerce' }
   ];
 
   return (
@@ -23,77 +22,77 @@ export default function AcademicsPage({ onSearchClick }: { onSearchClick?: () =>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(198,138,83,0.1),transparent)]"></div>
         <div className="max-w-4xl mx-auto px-4 relative z-10 space-y-3">
           <span className="text-xs font-serif italic text-natural-clay uppercase font-bold tracking-widest block">Academic Pathways</span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-extrabold tracking-tight">Our Rigorous Departmental Curriculum</h1>
+          <h1 className="text-3xl sm:text-4xl font-serif font-extrabold tracking-tight">Our Rigorous Secondary School Curriculum</h1>
           <p className="text-sm text-[#E9E5D9] max-w-xl mx-auto leading-relaxed">
-            Nurturing young minds through fundamental literacy layers, logical frameworks, and scientific experimentation.
+            Nurturing young minds through clean academic layers, structured subject periods, and real science experiments.
           </p>
         </div>
       </section>
 
-      {/* Pathways sections Nursery, Primary, Secondary */}
+      {/* Pathways sections Science, Art, Commerce */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <h2 className="text-xs font-bold text-natural-green tracking-widest uppercase">Academic Divisions</h2>
           <h3 className="text-2xl font-serif font-bold text-natural-charcoal">The Framework of Student Growth</h3>
-          <p className="text-xs text-natural-charcoal/70">A smooth and robust pedagogical continuum spanning from early sensory training to university entrance prerequisites.</p>
+          <p className="text-xs text-natural-charcoal/70">A well-structured academic program guiding students through Junior Secondary and Senior Secondary specialties.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          {/* Nursery School CARD */}
+          {/* Science CARD */}
           <div className="bg-white rounded-3xl p-8 border border-natural-beige shadow-xs space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
-              <div className="p-3 bg-amber-50 text-[#C29B38] rounded-2xl w-fit">
-                <Book className="w-6 h-6" />
+              <div className="p-3 bg-blue-50 text-blue-700 rounded-2xl w-fit">
+                <Layers className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-serif font-bold text-natural-charcoal">Nursery School</h4>
-              <span className="text-[10px] uppercase tracking-widest text-[#C29B38] bg-amber-50 px-2 py-0.5 rounded font-black inline-block">Ages 2 - 5 Early Years</span>
+              <h4 className="text-lg font-serif font-bold text-natural-charcoal">Science Division</h4>
+              <span className="text-[10px] uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-black inline-block">SS1 - SS3 Classes</span>
               <p className="text-xs text-natural-charcoal/75 leading-relaxed">
-                Applying the classic Montessori approach. Fosters fundamental sensory cognition, fine/gross motor skills development, initial numbers, and bilingual vocabulary games.
+                Prepares students planning for future careers in engineering, medical sciences, analytics, and software logic. Includes fully equipped practical physics, chemistry, and biology lab modules.
               </p>
             </div>
             <ul className="text-xs text-natural-charcoal/80 space-y-2 border-t border-natural-beige pt-4">
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-[#C29B38]" /> Play-based sensory rooms</li>
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-[#C29B38]" /> Fine motor coordination drills</li>
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-[#C29B38]" /> Basic phonemes & language arts</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-blue-600" /> Hands-on biology lab sessions</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-blue-600" /> Practical physics calculations</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-blue-600" /> Chemistry molecular experiments</li>
             </ul>
           </div>
 
-          {/* Primary School CARD */}
+          {/* Art CARD */}
+          <div className="bg-white rounded-3xl p-8 border border-natural-beige shadow-xs space-y-6 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="p-3 bg-amber-50 text-[#C29B38] rounded-xl w-fit">
+                <Book className="w-6 h-6" />
+              </div>
+              <h4 className="text-lg font-serif font-bold text-natural-charcoal">Art Division</h4>
+              <span className="text-[10px] uppercase tracking-widest text-[#C29B38] bg-amber-50 px-2 py-0.5 rounded font-black inline-block">SS1 - SS3 Classes</span>
+              <p className="text-xs text-natural-charcoal/75 leading-relaxed">
+                Nurtures critical thinking, rhetoric expression, civic rights, history, and linguistic excellence. Students delve deeply into world literature, governance protocols, and fine arts portfolios.
+              </p>
+            </div>
+            <ul className="text-xs text-natural-charcoal/80 space-y-2 border-t border-natural-beige pt-4">
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-[#C29B38]" /> Debating & civic logic forums</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-[#C29B38]" /> Fine arts painting & composition</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-[#C29B38]" /> Comparative history essays</li>
+            </ul>
+          </div>
+
+          {/* Commerce CARD */}
           <div className="bg-white rounded-3xl p-8 border border-natural-beige shadow-xs space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
               <div className="p-3 bg-emerald-50 text-natural-green rounded-xl w-fit">
-                <Layers className="w-6 h-6" />
-              </div>
-              <h4 className="text-lg font-serif font-bold text-natural-charcoal">Primary School</h4>
-              <span className="text-[10px] uppercase tracking-widest text-natural-green bg-emerald-50 px-2 py-0.5 rounded font-black inline-block">Grades 1 - 6 Elementary</span>
-              <p className="text-xs text-natural-charcoal/75 leading-relaxed">
-                Establishing the intellectual pillars. Students master core math equations, grammatical critiques, world geography basics, critical reasoning, and team athletic trials.
-              </p>
-            </div>
-            <ul className="text-xs text-natural-charcoal/80 space-y-2 border-t border-natural-beige pt-4">
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-natural-green" /> Spelling bee & rhetoric guides</li>
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-natural-green" /> Multiplicative arithmetic foundation</li>
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-natural-green" /> Interactive logic classes</li>
-            </ul>
-          </div>
-
-          {/* Secondary School CARD */}
-          <div className="bg-white rounded-3xl p-8 border border-natural-beige shadow-xs space-y-6 flex flex-col justify-between">
-            <div className="space-y-4">
-              <div className="p-3 bg-blue-50 text-blue-700 rounded-xl w-fit">
                 <GraduationCap className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-serif font-bold text-natural-charcoal">Secondary School</h4>
-              <span className="text-[10px] uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-black inline-block">Grades 7 - 12 Prep</span>
+              <h4 className="text-lg font-serif font-bold text-natural-charcoal">Commerce Division</h4>
+              <span className="text-[10px] uppercase tracking-widest text-natural-green bg-emerald-50 px-2 py-0.5 rounded font-black inline-block">SS1 - SS3 Classes</span>
               <p className="text-xs text-natural-charcoal/75 leading-relaxed">
-                Rigorous college preps. Highlights include Advanced Placement (AP) science labs, computer logic algorithms, civil debate leagues, and world history thesis publications.
+                Designed for future professionals in accounting, business management, economics, and logistics. Fosters robust analytical practices, business ledger recording, and commerce strategies.
               </p>
             </div>
             <ul className="text-xs text-natural-charcoal/80 space-y-2 border-t border-natural-beige pt-4">
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-blue-600" /> AP STEM coursework series</li>
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-blue-600" /> Pre-engineering design lab assays</li>
-              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-blue-600" /> Scholarship & SAT prep guidance</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-natural-green" /> Business financial book bookkeeping</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-natural-green" /> Economic theories & charts</li>
+              <li className="flex items-center gap-2"><ChevronRight className="w-3.5 h-3.5 text-natural-green" /> Office practice workflows</li>
             </ul>
           </div>
 
@@ -104,19 +103,19 @@ export default function AcademicsPage({ onSearchClick }: { onSearchClick?: () =>
       <section className="py-16 bg-natural-light/20 border-t border-b border-natural-beige">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div>
-            <h3 className="text-xs font-bold text-natural-green tracking-widest uppercase">The Registrar Faculty Group</h3>
+            <h3 className="text-xs font-bold text-natural-green tracking-widest uppercase">The School Faculty</h3>
             <h4 className="text-2xl font-serif font-extrabold text-natural-charcoal mt-1">Our Core Academic Departments</h4>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {departments.map((dept, idx) => (
               <div key={idx} className="bg-white p-6 rounded-2xl border border-natural-beige shadow-xs space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-serif font-bold text-natural-charcoal">{dept.name}</span>
-                  <span className="text-[10px] bg-natural-light px-2 py-0.5 rounded text-natural-green font-semibold">Head: {dept.head}</span>
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center justify-between">
+                  <span className="text-sm font-serif font-bold text-natural-charcoal">{dept.name}</span>
+                  <span className="text-[10px] bg-natural-light px-2 py-0.5 rounded text-natural-green font-semibold w-fit leading-none">Head: {dept.head}</span>
                 </div>
                 <div className="h-[1px] w-full bg-slate-100"></div>
-                <p className="text-xs text-natural-charcoal/80 leading-relaxed font-semibold">Syllabus Highlights:</p>
+                <p className="text-xs text-natural-charcoal/85 leading-relaxed font-bold">Subjects Covered:</p>
                 <p className="text-xs text-natural-charcoal/65 leading-relaxed">{dept.courses}</p>
               </div>
             ))}
@@ -124,13 +123,13 @@ export default function AcademicsPage({ onSearchClick }: { onSearchClick?: () =>
         </div>
       </section>
 
-      {/* Modern E-Library books section */}
+      {/* Reference Library */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
           <div>
-            <h3 className="text-xs font-bold text-natural-green tracking-widest uppercase">E-Library Resources</h3>
-            <h4 className="text-2xl font-serif font-extrabold text-natural-charcoal mt-1">Recommended Scholarly Books Shelf</h4>
-            <p className="text-xs text-natural-charcoal/60">Digital copies of these syllabus essentials are downloadable inside the student secure portal.</p>
+            <h3 className="text-xs font-bold text-natural-green tracking-widest uppercase">Recommended Materials</h3>
+            <h4 className="text-2xl font-serif font-extrabold text-natural-charcoal mt-1">Recommended Syllabus Books</h4>
+            <p className="text-xs text-natural-charcoal/60">Registered students can view/download textbook references on their dashboard.</p>
           </div>
         </div>
 

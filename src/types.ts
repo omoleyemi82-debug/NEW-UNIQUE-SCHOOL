@@ -30,6 +30,11 @@ export interface Student {
   emergencyContactName?: string;
   emergencyContactPhone?: string;
 
+  // Report card fields
+  department?: 'Science' | 'Art' | 'Commerce' | 'N/A';
+  houseUnit?: string;
+  passportPhoto?: string;
+
   // Invoice & Tuition balance tracker
   tuitionTotal?: number;
   tuitionPaid?: number;

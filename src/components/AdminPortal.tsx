@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useSchool } from '../context/SchoolContext';
-import { EventType, UserRole, Subject, TeacherAssignment, Admin, RoleConfig, LoginActivity } from '../types';
+import { EventType, UserRole, Subject, TeacherAssignment, Admin, RoleConfig, LoginActivity, Student } from '../types';
 import ClassroomSubjectManager from './ClassroomSubjectManager';
+import CBTQuizManagement from './CBTQuizManagement';
+import ReportSheet from './ReportSheet';
+import StudentDirectorySearch from './StudentDirectorySearch';
 import { encryptPassword, verifyPassword } from '../utils/security';
 import { SearchableDropdown } from './SearchableDropdown';
 import { countriesList, countryStatesMap, getDistrictsForState } from '../utils/locationData';
@@ -91,6 +94,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
 
   // Selected student/teacher for detail inspecting
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [adminSelectedStudentId, setAdminSelectedStudentId] = useState<string>(() => students[0]?.id || '');
   const [selectedTeacherId, setSelectedTeacherId] = useState<string | null>(null);
 
   // Search & Filter state
@@ -906,6 +910,37 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Comprehensive Student Report Cards Panel */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
+            <div>
+              <h4 className="font-extrabold text-slate-905 text-sm mb-1">Student Terminal Report Sheets & Endorsements Log</h4>
+              <p className="text-xs text-slate-500">Dual-plane supervisor mode. View, override, and print certified terminals for any enrolled student with exact WAEC weight scales.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+              <div>
+                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1.5 font-sans">Student Target Record</label>
+                <select
+                  value={adminSelectedStudentId}
+                  onChange={(e) => setAdminSelectedStudentId(e.target.value)}
+                  className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white rounded-xl focus:border-indigo-500 outline-none font-bold text-slate-800"
+                >
+                  {students.map((st) => (
+                    <option key={st.id} value={st.id}>
+                      {st.name} ({st.gradeLevel})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {adminSelectedStudentId && (
+              <div className="border border-slate-200 rounded-3xl overflow-hidden p-0 bg-slate-50">
+                <ReportSheet initialStudentId={adminSelectedStudentId} isReadOnly={false} />
+              </div>
+            )}
           </div>
         </>
       )}
@@ -2011,125 +2046,46 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
 
               {/* STUDENTS DIRECTORY ROUTER WITH LIVE SEARCH & FILTERS */}
               {activeRosterTab === 'students' && (
-                <div id="studentDirList" className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-150">
-                  <div>
-                    <label className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Search Students</label>
-                    <div className="relative">
-                      <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="Search name, ID or email..."
-                        value={searchStudentQuery}
-                        onChange={(e) => setSearchStudentQuery(e.target.value)}
-                        className="w-full text-xs pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Filter Class Placement</label>
-                    <select
-                      value={filterStudentGrade}
-                      onChange={(e) => setFilterStudentGrade(e.target.value)}
-                      className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg outline-none font-semibold text-slate-705"
-                    >
-                      <option value="All Classes">All Classes</option>
-                      {courses.filter(c => c.isActive !== false).map((cls) => (
-                        <option key={cls.id} value={cls.name}>{cls.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="divide-y divide-slate-100 max-h-[420px] overflow-y-auto pr-2">
-                  {students
-                    .filter((st) => {
-                      const matchesSearch = st.name.toLowerCase().includes(searchStudentQuery.toLowerCase()) || 
-                                           st.email.toLowerCase().includes(searchStudentQuery.toLowerCase()) ||
-                                           (st.admissionNumber && st.admissionNumber.toLowerCase().includes(searchStudentQuery.toLowerCase())) ||
-                                           st.id.toLowerCase().includes(searchStudentQuery.toLowerCase());
-                      const matchesGrade = filterStudentGrade === 'All Classes' || filterStudentGrade === '' || st.gradeLevel === filterStudentGrade;
-                      return matchesSearch && matchesGrade;
-                    })
-                    .map((st) => {
-                      const isAcctActive = st.isActiveAccount !== false; // defaults to true
-                      return (
-                        <div key={st.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="relative">
-                              <img src={st.avatar} alt="Avatar pupil" className="w-9 h-9 object-cover rounded-full border border-slate-200" referrerPolicy="no-referrer" />
-                              <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-white ${isAcctActive ? 'bg-emerald-505 bg-emerald-500' : 'bg-rose-500'}`} />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-bold text-slate-900 block">{st.name}</span>
-                                {!isAcctActive && (
-                                  <span className="text-[7.5px] uppercase font-bold tracking-tight bg-rose-50 text-rose-600 px-1 rounded">SUSPENDED</span>
-                                )}
-                              </div>
-                              <span className="text-[10px] text-slate-400 font-bold block">{st.gradeLevel} • {st.nationality || 'Nigeria'} • Guardian: {st.guardianName}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              onClick={() => {
-                                setSelectedStudentId(st.id);
-                                setSelectedTeacherId(null);
-                              }}
-                              className="p-1.5 bg-slate-150 hover:bg-slate-200 rounded text-neutral-green hover:text-indigo-900 cursor-pointer transition-colors"
-                              title="Inspect Comprehensive Biodata Card"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => {
-                                setIsEditingUser(true);
-                                setEditingUserId(st.id);
-                                setRegistryRole('student');
-                                setRegName(st.name);
-                                setRegEmail(st.email);
-                                setRegGender(st.gender || 'Male');
-                                setRegDOB(st.dateOfBirth || '');
-                                setRegNationality(st.nationality || 'Nigeria');
-                                setRegState(st.state || 'Lagos');
-                                setRegLGA(st.lga || '');
-                                setRegReligion(st.religion || 'Christianity');
-                                setRegBloodGroup(st.bloodGroup || 'O+');
-                                setRegMedicalNotes(st.medicalNotes || '');
-                                setRegHomeAddress(st.homeAddress || '');
-                                setRegGradeLevel(st.gradeLevel);
-                                setRegGuardianName(st.guardianName || '');
-                                setRegGuardianPhone(st.guardianPhone || '');
-                                setRegGuardianEmail(st.guardianEmail || '');
-                                setRegEmergencyContactName(st.emergencyContactName || '');
-                                setRegEmergencyContactPhone(st.emergencyContactPhone || '');
-                                setUploadedPhoto(st.avatar || null);
-                              }}
-                              className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded text-indigo-600 hover:text-indigo-805 cursor-pointer transition-colors"
-                              title="Edit Registry Student Data"
-                            >
-                              <Pencil className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => {
-                                if (selectedStudentId === st.id) setSelectedStudentId(null);
-                                if (editingUserId === st.id) {
-                                  setIsEditingUser(false);
-                                  setEditingUserId(null);
-                                }
-                                removeStudent(st.id);
-                              }}
-                              className="p-1.5 hover:bg-rose-50 rounded text-rose-500 hover:text-rose-700 cursor-pointer transition-colors"
-                              title="Expel Student Registry File"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
+                <StudentDirectorySearch
+                  students={students}
+                  courses={courses}
+                  selectedStudentId={selectedStudentId}
+                  onInspect={(studentId) => {
+                    setSelectedStudentId(studentId);
+                    setSelectedTeacherId(null);
+                  }}
+                  onEdit={(st) => {
+                    setIsEditingUser(true);
+                    setEditingUserId(st.id);
+                    setRegistryRole('student');
+                    setRegName(st.name);
+                    setRegEmail(st.email);
+                    setRegGender(st.gender || 'Male');
+                    setRegDOB(st.dateOfBirth || '');
+                    setRegNationality(st.nationality || 'Nigeria');
+                    setRegState(st.state || 'Lagos');
+                    setRegLGA(st.lga || '');
+                    setRegReligion(st.religion || 'Christianity');
+                    setRegBloodGroup(st.bloodGroup || 'O+');
+                    setRegMedicalNotes(st.medicalNotes || '');
+                    setRegHomeAddress(st.homeAddress || '');
+                    setRegGradeLevel(st.gradeLevel);
+                    setRegGuardianName(st.guardianName || '');
+                    setRegGuardianPhone(st.guardianPhone || '');
+                    setRegGuardianEmail(st.guardianEmail || '');
+                    setRegEmergencyContactName(st.emergencyContactName || '');
+                    setRegEmergencyContactPhone(st.emergencyContactPhone || '');
+                    setUploadedPhoto(st.passportPhoto || st.avatar || null);
+                  }}
+                  onDelete={(studentId) => {
+                    if (selectedStudentId === studentId) setSelectedStudentId(null);
+                    if (editingUserId === studentId) {
+                      setIsEditingUser(false);
+                      setEditingUserId(null);
+                    }
+                    removeStudent(studentId);
+                  }}
+                />
               )}
 
               {/* TEACHERS DIRECTORY WITH FILTER BY DEPARTMENT AND SUBJECTS */}
@@ -4087,6 +4043,10 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
             </div>
           )}
         </div>
+      )}
+
+      {activeTab === 'quiz' && (
+        <CBTQuizManagement />
       )}
     </div>
   );

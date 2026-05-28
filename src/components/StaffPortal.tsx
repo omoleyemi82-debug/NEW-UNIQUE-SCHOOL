@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useSchool } from '../context/SchoolContext';
 import { Course, AttendanceStatus, GradeCategory, Student } from '../types';
+import CBTQuizManagement from './CBTQuizManagement';
+import ReportSheet from './ReportSheet';
 import {
   FileSpreadsheet,
   ClipboardCheck,
@@ -107,6 +109,7 @@ export default function StaffPortal({ activeTab }: { activeTab: string }) {
   const [newGradeCategory, setNewGradeCategory] = useState<GradeCategory>('homework');
   const [newGradeStudentId, setNewGradeStudentId] = useState<string>(() => students[0]?.id || '');
   const [gradeSheetSuccess, setGradeSheetSuccess] = useState(false);
+  const [teacherSelectedStudent, setTeacherSelectedStudent] = useState<string>(() => students[0]?.id || '');
 
   const handleAddGradeSubmission = (e: React.FormEvent) => {
     e.preventDefault();
@@ -589,6 +592,37 @@ export default function StaffPortal({ activeTab }: { activeTab: string }) {
                   </div>
                 )}
               </div>
+
+              {/* Comprehensive Student Report Cards Panel */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
+                <div>
+                  <h4 className="font-extrabold text-slate-900 text-sm mb-1">Student Report Sheets & Endorsements</h4>
+                  <p className="text-xs text-slate-500">Select any student below to view, download, or edit their terminal report sheet, grades, principal/tutor comments, and WAEC grading parameters.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1.5 font-sans">Student Target Record</label>
+                    <select
+                      value={teacherSelectedStudent}
+                      onChange={(e) => setTeacherSelectedStudent(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white rounded-xl focus:border-teal-500 outline-none font-bold text-slate-800"
+                    >
+                      {students.map((st) => (
+                        <option key={st.id} value={st.id}>
+                          {st.name} ({st.gradeLevel})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {teacherSelectedStudent && (
+                  <div className="border border-slate-200 rounded-3xl overflow-hidden p-0 bg-slate-50">
+                    <ReportSheet initialStudentId={teacherSelectedStudent} isReadOnly={false} />
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -696,197 +730,7 @@ export default function StaffPortal({ activeTab }: { activeTab: string }) {
 
           {/* 4. CONFIGURE QUIZZES TAB */}
           {activeTab === 'quiz' && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {/* Draft Section */}
-              <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
-                <div>
-                  <h4 className="font-extrabold text-slate-900 text-sm">Design Multiple Choice Quiz</h4>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Assess students dynamically and feed scores instantly to grade books</span>
-                </div>
-
-                <form onSubmit={handlePublishQuiz} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1.5">Quiz Title *</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Limits & Slope Estimation"
-                        value={quizTitle}
-                        onChange={(e) => setQuizTitle(e.target.value)}
-                        className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white rounded-xl focus:border-teal-500 outline-none"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1.5">Time Limit (Mins)</label>
-                        <input
-                          type="number"
-                          required
-                          min="1"
-                          max="60"
-                          value={quizTimeLimit}
-                          onChange={(e) => setQuizTimeLimit(Number(e.target.value))}
-                          className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white rounded-xl focus:border-teal-550 outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1.5">Due date</label>
-                        <input
-                          type="date"
-                          required
-                          value={quizDueDate}
-                          onChange={(e) => setQuizDueDate(e.target.value)}
-                          className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1.5">Brief Description/Rules</label>
-                    <textarea
-                      rows={2}
-                      placeholder="e.g. Tests basic Limits equations. Complete individually."
-                      value={quizDesc}
-                      onChange={(e) => setQuizDesc(e.target.value)}
-                      className="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:bg-white rounded-xl outline-none"
-                    />
-                  </div>
-
-                  {/* Question Cards in designer */}
-                  <div className="space-y-6 border-t border-slate-100 pt-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Added Questions Grid</span>
-                      <button
-                        type="button"
-                        onClick={handleAddQuestionToQuizDraft}
-                        className="text-xs font-bold text-teal-600 hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        <Plus className="w-4 h-4" /> Add Questions Item
-                      </button>
-                    </div>
-
-                    {quizQuestions.map((q, qIndex) => (
-                      <div key={qIndex} className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-extrabold text-teal-600 uppercase">Question #{qIndex + 1}</span>
-                          {quizQuestions.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveQuestionFromQuizDraft(qIndex)}
-                              className="text-10px font-extrabold text-rose-500 hover:text-rose-700 cursor-pointer flex items-center gap-0.5"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" /> Remove Question
-                            </button>
-                          )}
-                        </div>
-
-                        <div>
-                          <input
-                            type="text"
-                            required
-                            placeholder="Type multiple choice question prompt here..."
-                            value={q.questionText}
-                            onChange={(e) => handleUpdateQuizQuestionText(qIndex, e.target.value)}
-                            className="w-full text-xs px-3 py-2 bg-white border border-slate-200 focus:border-teal-500 rounded-lg outline-none"
-                          />
-                        </div>
-
-                        {/* 4 Choices */}
-                        <div className="space-y-2">
-                          <span className="block text-[8px] font-black uppercase text-slate-400 tracking-wider">Configure Options (Tag the correct option using the left check bubble)</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {q.options.map((opt, oIndex) => {
-                              const isCorrect = q.correctOptionIndex === oIndex;
-                              return (
-                                <div key={oIndex} className="flex items-center gap-2">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleSelectCorrectOption(qIndex, oIndex)}
-                                    className={`w-6 h-6 rounded-full border flex justify-center items-center text-xs shrink-0 cursor-pointer ${
-                                      isCorrect ? 'bg-emerald-500 border-emerald-400 text-white font-bold' : 'bg-white border-slate-200 text-slate-405 hover:bg-slate-50'
-                                    }`}
-                                  >
-                                    {isCorrect ? "✓" : oIndex + 1}
-                                  </button>
-                                  <input
-                                    type="text"
-                                    required
-                                    placeholder={`Choice option #${oIndex + 1}`}
-                                    value={opt}
-                                    onChange={(e) => handleUpdateQuizQuestionOption(qIndex, oIndex, e.target.value)}
-                                    className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 focus:border-teal-500 rounded-lg outline-none font-medium"
-                                  />
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Optional explanation */}
-                        <div>
-                          <input
-                            type="text"
-                            placeholder="Add explanation/justification (optional)..."
-                            value={q.explanation}
-                            onChange={(e) => handleUpdateQuizQuestionExplanation(qIndex, e.target.value)}
-                            className="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-lg outline-none text-slate-500 font-sans"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold uppercase text-xs tracking-wider rounded-xl cursor-pointer shadow-md select-none"
-                  >
-                    Publish Multiple Choice Quiz
-                  </button>
-                </form>
-
-                {quizCreatedMsg && (
-                  <div className="p-3.5 bg-emerald-50 text-emerald-800 border border-emerald-250 rounded-xl text-xs flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 animate-bounce" /> Quiz published! Assigned classes can now access items in their portals.
-                  </div>
-                )}
-              </div>
-
-              {/* Published Quizzes */}
-              <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
-                <div>
-                  <h4 className="font-extrabold text-slate-900 text-sm">Active Class Quizzes</h4>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">List of examinations visible to classroom folders</span>
-                </div>
-
-                <div className="divide-y divide-slate-100">
-                  {quizzes
-                    .filter((q) => q.courseId === selectedCourseId)
-                    .map((qz) => (
-                      <div key={qz.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between">
-                        <div>
-                          <p className="font-extrabold text-slate-900 text-sm">{qz.title}</p>
-                          <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider pt-0.5">
-                            {qz.questions.length} questions • Time limit: {qz.timeLimitMinutes}m
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => toggleQuizActive(qz.id)}
-                            className={`px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-widest cursor-pointer ${
-                              qz.isActive ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                            }`}
-                          >
-                            {qz.isActive ? 'Active' : 'Draft'}
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
+            <CBTQuizManagement />
           )}
         </>
       )}

@@ -36,6 +36,7 @@ import {
   FileText
 } from 'lucide-react';
 import { getWAECGrade, calculateTermPerformance } from '../utils/gradeUtils';
+import ReportSheet from './ReportSheet';
 
 export default function ParentPortal({ activeTab: initialActiveTab }: { activeTab: string }) {
   const { 
@@ -649,6 +650,9 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
 
       {/* SECTION B: TRANSCRIPTS & ACADEMIC SHEETS */}
       {activeTab === 'results' && (
+        <ReportSheet initialStudentId={activeStudent.id} isReadOnly={true} />
+      )}
+      {activeTab === 'results_legacy' && (
         <div className="space-y-8 animate-fade-in" id="parent-results-viewport">
           {/* Action Bar */}
           <div className="bg-white p-6 rounded-2xl border border-natural-beige shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print:hidden">
