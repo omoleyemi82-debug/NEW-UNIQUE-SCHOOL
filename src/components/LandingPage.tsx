@@ -154,7 +154,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
           >
             <div className="p-1 bg-white border border-natural-beige rounded-xl shadow-xs shrink-0 flex items-center justify-center">
               <img 
-                src="/src/assets/images/school_logo_1779413996009.png" 
+                src="/logo.png" 
                 alt="New Unique Academy Logo" 
                 className="w-16 h-16 object-contain"
                 referrerPolicy="no-referrer"
@@ -632,7 +632,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
               <div className="absolute -top-4 -left-4 w-full h-full rounded-2xl bg-natural-clay/20 border border-white/10 transform rotate-1"></div>
               {/* Front Image area */}
               <img
-                src="/src/assets/images/front_page_1779414015980.png"
+                src="/front_page.png"
                 alt="New Unique Academy Front Campus"
                 className="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-xl border border-natural-beige"
                 referrerPolicy="no-referrer"
@@ -1286,7 +1286,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                     <div className="flex flex-col items-center gap-1.5">
                       <div className="w-10 h-10 bg-white p-0.5 rounded-full flex items-center justify-center shadow-md shrink-0">
                         <img 
-                          src="/src/assets/images/school_logo_1779413996009.png" 
+                          src="/logo.png" 
                           alt="NUA Crest" 
                           className="w-8 h-8 object-contain"
                           referrerPolicy="no-referrer"
@@ -1673,7 +1673,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {[
-                      { url: "/src/assets/images/front_page_1779414015980.png", label: "Main Front Campus & Gatehouses" },
+                      { url: "/front_page.png", label: "Main Front Campus & Gatehouses" },
                       { url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&auto=format&fit=crop&q=80", label: "State-of-the-Art AP Biology Lab" },
                       { url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&auto=format&fit=crop&q=80", label: "Active Student Consultation Study" },
                       { url: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=400&auto=format&fit=crop&q=80", label: "Central Library Reading desks" },

@@ -93,7 +93,7 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
           <div className="flex items-center gap-2.5">
             <div className="p-0.5 bg-white border border-natural-beige rounded-lg shadow-xs shrink-0 flex items-center justify-center">
               <img 
-                src="/src/assets/images/school_logo_1779413996009.png" 
+                src="/logo.png" 
                 alt="New Unique Academy Logo" 
                 className="w-9 h-9 object-contain"
                 referrerPolicy="no-referrer"

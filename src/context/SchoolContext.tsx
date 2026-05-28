@@ -17,7 +17,10 @@ import {
   SchoolMessage,
   Subject,
   TeacherAssignment,
-  PaymentMethodConfig
+  PaymentMethodConfig,
+  Admin,
+  RoleConfig,
+  LoginActivity
 } from '../types';
 import {
   initialStudents,
@@ -117,6 +120,17 @@ interface SchoolContextProps {
   
   // Messages Actions
   addMessage: (message: Omit<SchoolMessage, 'id'>) => void;
+
+  // Authentication & Security Additions
+  admins: Admin[];
+  rolesConfig: RoleConfig[];
+  loginSessions: LoginActivity[];
+  schoolName: string;
+  addAdmin: (admin: Omit<Admin, 'id'>) => void;
+  updateAdmin: (id: string, updatedData: Partial<Admin>) => void;
+  removeAdmin: (id: string) => void;
+  trackLoginActivity: (username: string, role: string, status: 'SUCCESS' | 'FAILED' | 'PASSWORD_RESET', details?: string) => void;
+  updateSchoolName: (name: string) => void;
 }
 
 const SchoolContext = createContext<SchoolContextProps | undefined>(undefined);
@@ -288,6 +302,32 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return saved ? JSON.parse(saved) : initialMessages;
   });
 
+  const [admins, setAdmins] = useState<Admin[]>(() => {
+    const saved = localStorage.getItem('school_admins');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [rolesConfig, setRolesConfig] = useState<RoleConfig[]>(() => {
+    const saved = localStorage.getItem('roles_config');
+    if (saved) return JSON.parse(saved);
+    return [
+      { id: 'r1', role: 'super_admin', name: 'Super Admin', description: 'Complete system oversight, admin creation, secure records deletion, backups, full academic & payment ledger tables.', permissions: ['full_access', 'user_management'] },
+      { id: 'r2', role: 'admin', name: 'Administrator', description: 'System-wide scheduling and operations, edit calendars, register classes, handle bursa approvals & invoices, deactivate users.', permissions: ['user_management', 'finances', 'grades', 'cbt'] },
+      { id: 'r3', role: 'teacher', name: 'Faculty Member', description: 'Enter test and assignment marks, upload attendance lists, direct digital quiz classrooms and syllabus.', permissions: ['attendance', 'grades', 'cbt'] },
+      { id: 'r4', role: 'parent', name: 'Parent Representative', description: 'Inspect academic marks, download receipts, review notifications and invoices for linked children.', permissions: ['read_only_records'] },
+      { id: 'r5', role: 'student', name: 'Enrolled Student', description: 'Review progress charts, undertake CBT tests, download syllabus records, view school calender.', permissions: ['undertake_cbt'] },
+    ];
+  });
+
+  const [loginSessions, setLoginSessions] = useState<LoginActivity[]>(() => {
+    const saved = localStorage.getItem('login_sessions');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [schoolName, setSchoolName] = useState<string>(() => {
+    return localStorage.getItem('school_name') || 'New Unique Academy';
+  });
+
   // Sync state to localStorage on any change
   useEffect(() => {
     localStorage.setItem('role', currentRole);
@@ -317,6 +357,22 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     localStorage.setItem('school_payment_methods', JSON.stringify(paymentMethods));
   }, [paymentMethods]);
+
+  useEffect(() => {
+    localStorage.setItem('school_admins', JSON.stringify(admins));
+  }, [admins]);
+
+  useEffect(() => {
+    localStorage.setItem('roles_config', JSON.stringify(rolesConfig));
+  }, [rolesConfig]);
+
+  useEffect(() => {
+    localStorage.setItem('login_sessions', JSON.stringify(loginSessions));
+  }, [loginSessions]);
+
+  useEffect(() => {
+    localStorage.setItem('school_name', schoolName);
+  }, [schoolName]);
 
   useEffect(() => {
     localStorage.setItem('students', JSON.stringify(students));
@@ -776,6 +832,49 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setMessages((prev) => [...prev, newMsg]);
   };
 
+  // Authentication & Security actions
+  const addAdmin = (adminData: Omit<Admin, 'id'>) => {
+    const newAdmin: Admin = {
+      ...adminData,
+      id: `admin_${Date.now()}`
+    };
+    setAdmins(prev => [...prev, newAdmin]);
+  };
+
+  const updateAdmin = (id: string, updatedData: Partial<Admin>) => {
+    setAdmins(prev => prev.map(a => a.id === id ? { ...a, ...updatedData } : a));
+  };
+
+  const removeAdmin = (id: string) => {
+    setAdmins(prev => prev.filter(a => a.id !== id));
+  };
+
+  const trackLoginActivity = (username: string, role: string, status: 'SUCCESS' | 'FAILED' | 'PASSWORD_RESET', details?: string) => {
+    const ips = ['192.168.1.112', '102.89.22.41', '197.210.64.9', '41.190.2.14', '127.0.0.1'];
+    const browsers = [
+      'Chrome v124.0 (Windows NT 10.0)',
+      'Safari v17.4 (Macintosh OS X)',
+      'Firefox v125.0 (Ubuntu Linux)',
+      'Chrome Mobile (iOS)'
+    ];
+    const newActivity: LoginActivity = {
+      id: `act_${Date.now()}_${Math.floor(100 + Math.random() * 900)}`,
+      userId: username || 'anonymous',
+      username: username || 'Anonymous User',
+      role: role || 'guest',
+      timestamp: new Date().toISOString(),
+      ip: ips[Math.floor(Math.random() * ips.length)] || '127.0.0.1',
+      browser: browsers[Math.floor(Math.random() * browsers.length)] || 'Chrome v124.0',
+      status,
+      details
+    };
+    setLoginSessions(prev => [newActivity, ...prev].slice(0, 100)); // Keep last 100 activities
+  };
+
+  const updateSchoolName = (name: string) => {
+    setSchoolName(name);
+  };
+
   // Subjects and Assignments actions
   const addSubject = (subjectData: Omit<Subject, 'id'>) => {
     const newSubject: Subject = {
@@ -887,7 +986,16 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         addNotification,
         markNotificationAsRead,
         clearNotifications,
-        addMessage
+        addMessage,
+        admins,
+        rolesConfig,
+        loginSessions,
+        schoolName,
+        addAdmin,
+        updateAdmin,
+        removeAdmin,
+        trackLoginActivity,
+        updateSchoolName
       }}
     >
       {children}

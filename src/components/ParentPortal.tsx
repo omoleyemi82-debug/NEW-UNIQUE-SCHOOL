@@ -678,7 +678,7 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
             {/* Watermark Logo */}
             <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none z-0">
               <img 
-                src="/src/assets/images/school_logo_1779413996009.png" 
+                src="/logo.png" 
                 alt="Watermark Logo" 
                 className="w-96 h-96 object-contain"
                 referrerPolicy="no-referrer"
@@ -702,7 +702,7 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
               <div className="text-center pb-6 border-b border-natural-beige/50 space-y-2">
                 <div className="flex justify-center mb-3">
                   <img 
-                    src="/src/assets/images/school_logo_1779413996009.png" 
+                    src="/logo.png" 
                     alt="NUA Logo" 
                     className="w-16 h-16 object-contain"
                     referrerPolicy="no-referrer"
@@ -2060,7 +2060,7 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
             {/* Watermark logo under block */}
             <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none z-0">
               <img 
-                src="/src/assets/images/school_logo_1779413996009.png" 
+                src="/logo.png" 
                 alt="Emblem watermark" 
                 className="w-40 h-40 object-contain"
                 referrerPolicy="no-referrer"
@@ -2079,7 +2079,7 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
               <div className="text-center pb-4 border-b border-dashed border-natural-beige/85 space-y-1">
                 <div className="w-12 h-12 bg-white p-0.5 rounded-full flex items-center justify-center border border-natural-beige mx-auto mb-1.5 shadow-xs">
                   <img 
-                    src="/src/assets/images/school_logo_1779413996009.png" 
+                    src="/logo.png" 
                     alt="NUA emblem" 
                     className="w-10 h-10 object-contain"
                     referrerPolicy="no-referrer"

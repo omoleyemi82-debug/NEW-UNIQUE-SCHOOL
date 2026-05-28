@@ -177,6 +177,7 @@ export interface CalendarEvent {
 export interface Parent {
   id: string;
   name: string;
+  username?: string;
   email: string;
   phone: string;
   password?: string;
@@ -251,5 +252,40 @@ export interface PaymentMethodConfig {
   apiSecret?: string;
   clientSecret?: string;
 }
+
+export interface Admin {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+  password?: string; // encrypted
+  role: 'super_admin' | 'admin';
+  permissions: string[]; // e.g. ["user_management", "finances", "grades", "cbt", "full_access"]
+  isActiveAccount: boolean;
+  avatar?: string;
+  schoolName?: string;
+}
+
+export interface RoleConfig {
+  id: string;
+  role: string;
+  name: string;
+  description: string;
+  permissions: string[];
+}
+
+export interface LoginActivity {
+  id: string;
+  userId: string;
+  username: string;
+  role: string;
+  timestamp: string;
+  ip: string;
+  browser: string;
+  status: 'SUCCESS' | 'FAILED' | 'LOCKED' | 'PASSWORD_RESET';
+  details?: string;
+}
+
 
 

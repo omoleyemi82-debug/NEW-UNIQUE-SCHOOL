@@ -475,7 +475,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
               {/* Premium Watermark Stamp */}
               <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none z-0">
                 <img 
-                  src="/src/assets/images/school_logo_1779413996009.png" 
+                  src="/logo.png" 
                   alt="Watermark Logo" 
                   className="w-96 h-96 object-contain"
                   referrerPolicy="no-referrer"
@@ -499,7 +499,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
                 <div className="text-center pb-6 border-b border-natural-beige/50 space-y-2">
                   <div className="flex justify-center mb-3">
                     <img 
-                      src="/src/assets/images/school_logo_1779413996009.png" 
+                      src="/logo.png" 
                       alt="NUA Logo" 
                       className="w-16 h-16 object-contain"
                       referrerPolicy="no-referrer"
@@ -1294,7 +1294,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
                     <div className="text-center pb-4 border-b border-dashed border-natural-beige/85">
                       <div className="w-12 h-12 bg-white p-0.5 rounded-full flex items-center justify-center border border-natural-beige mx-auto mb-1.5 shadow-xs">
                         <img 
-                          src="/src/assets/images/school_logo_1779413996009.png" 
+                          src="/logo.png" 
                           alt="NUA Logo" 
                           className="w-10 h-10 object-contain"
                           referrerPolicy="no-referrer"
@@ -1739,7 +1739,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
                   <div className="flex items-center gap-4">
                     <div className="relative group w-16 h-16 rounded-full bg-slate-50 border border-slate-250 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                       <img 
-                        src={targetStudent.avatar || targetStudent.hasBadgeWithPhoto || "/src/assets/images/school_logo_1779413996009.png"} 
+                        src={targetStudent.avatar || targetStudent.hasBadgeWithPhoto || "/logo.png"} 
                         alt="Active Bio Avatar" 
                         className="w-full h-full object-cover rounded-full"
                         referrerPolicy="no-referrer"
@@ -2121,7 +2121,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
                           <div className="flex justify-between items-start border-b border-white/10 pb-1.5">
                             <div className="flex items-center gap-1.5">
                               <img 
-                                src="/src/assets/images/school_logo_1779413996009.png" 
+                                src="/logo.png" 
                                 alt="Preston Logo" 
                                 className="w-6 h-6 object-contain bg-white rounded-full p-0.5"
                                 referrerPolicy="no-referrer"
@@ -2139,7 +2139,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
                             {/* Photo avatar */}
                             <div className="w-16 h-20 bg-slate-100 rounded-lg border border-white/20 overflow-hidden relative shadow-md shrink-0 p-0.5">
                               <img 
-                                src={targetStudent.hasBadgeWithPhoto || "/src/assets/images/school_logo_1779413996009.png"} 
+                                src={targetStudent.hasBadgeWithPhoto || "/logo.png"} 
                                 alt="ID Passport Photo" 
                                 className="w-full h-full object-cover rounded-md"
                                 referrerPolicy="no-referrer"

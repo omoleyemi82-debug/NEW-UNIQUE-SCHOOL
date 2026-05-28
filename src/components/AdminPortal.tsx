@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSchool } from '../context/SchoolContext';
-import { EventType, UserRole, Subject, TeacherAssignment } from '../types';
+import { EventType, UserRole, Subject, TeacherAssignment, Admin, RoleConfig, LoginActivity } from '../types';
 import ClassroomSubjectManager from './ClassroomSubjectManager';
+import { encryptPassword, verifyPassword } from '../utils/security';
 import { SearchableDropdown } from './SearchableDropdown';
 import { countriesList, countryStatesMap, getDistrictsForState } from '../utils/locationData';
 import {
@@ -82,7 +83,10 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
     deleteSubject,
     addTeacherAssignment,
     removeTeacherAssignment,
-    assignSubjectsToClass
+    assignSubjectsToClass,
+    admins,
+    addAdmin,
+    updateAdmin
   } = useSchool();
 
   // Selected student/teacher for detail inspecting
@@ -173,11 +177,24 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
   const [newTermInput, setNewTermInput] = useState('');
 
   // Parent Management states
-  const [activeRosterTab, setActiveRosterTab] = useState<'students' | 'teachers' | 'parents'>('students');
+  const [activeRosterTab, setActiveRosterTab] = useState<'students' | 'teachers' | 'parents' | 'admins' | 'logs'>('students');
   const [searchParentQuery, setSearchParentQuery] = useState('');
   const [selectedParentId, setSelectedParentId] = useState<string | null>(null);
   const [isEditingParent, setIsEditingParent] = useState(false);
   const [editingParentId, setEditingParentId] = useState<string | null>(null);
+
+  // Additional Admin Registration States
+  const [adminFormName, setAdminFormName] = useState('');
+  const [adminFormUsername, setAdminFormUsername] = useState('');
+  const [adminFormPassword, setAdminFormPassword] = useState('');
+  const [adminFormEmail, setAdminFormEmail] = useState('');
+  const [adminFormPhone, setAdminFormPhone] = useState('');
+  const [adminFormPermissions, setAdminFormPermissions] = useState<string[]>(['user_management', 'grades']);
+  const [adminFormAvatar, setAdminFormAvatar] = useState('');
+  const [adminFormSuccess, setAdminFormSuccess] = useState('');
+  const [adminFormError, setAdminFormError] = useState('');
+  const [isEditingAdmin, setIsEditingAdmin] = useState(false);
+  const [editingAdminId, setEditingAdminId] = useState<string | null>(null);
 
   const [parentFormName, setParentFormName] = useState('');
   const [parentFormEmail, setParentFormEmail] = useState('');
@@ -278,7 +295,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
           emergencyContactName: regEmergencyContactName,
           emergencyContactPhone: regEmergencyContactPhone ? `${matchedCountry.code} ${regEmergencyContactPhone.replace(/\D/g, '')}` : '',
           username: credUsernameType === 'manual' ? credManualUsername : undefined,
-          password: credPasswordType === 'manual' ? credManualPassword : undefined,
+          password: credPasswordType === 'manual' ? encryptPassword(credManualPassword) : undefined,
           forcePasswordChange: credForcePasswordChange
         });
       } else {
@@ -289,7 +306,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
           bio: regBio,
           avatar: finalPhoto,
           username: credUsernameType === 'manual' ? credManualUsername : undefined,
-          password: credPasswordType === 'manual' ? credManualPassword : undefined,
+          password: credPasswordType === 'manual' ? encryptPassword(credManualPassword) : undefined,
           forcePasswordChange: credForcePasswordChange,
           gender: regGender,
           dateOfBirth: regDOB,
@@ -313,13 +330,24 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
       setEditingUserId(null);
     } else {
       // Create Operation
-      const finalUsername = credUsernameType === 'auto' 
-        ? (registryRole === 'student' ? `student_${regName.split(' ').slice(-1)[0]?.toLowerCase()}${students.length + 1}` : `teacher_${regName.split(' ').slice(-1)[0]?.toLowerCase()}${teachers.length + 1}`)
-        : credManualUsername;
+      let autoUsername = '';
+      if (registryRole === 'student') {
+        const clsObj = courses.find(c => c.id === regGradeLevel || c.name === regGradeLevel);
+        const prefixClass = clsObj ? clsObj.name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 3).toUpperCase() : 'P1A';
+        const rawSeqStr = String(students.length + 1).padStart(3, '0');
+        autoUsername = `${prefixClass}-${rawSeqStr}`;
+      } else {
+        const firstNameTeacher = regName.split(' ')[0]?.toLowerCase() || 'teacher';
+        const deptTag = (regAcademicDepartments[0] || regDepartment || 'maths').toLowerCase().substring(0, 5);
+        autoUsername = `${firstNameTeacher}.${deptTag}`;
+      }
 
-      const finalPassword = credPasswordType === 'auto'
+      const finalUsername = credUsernameType === 'auto' ? autoUsername : credManualUsername;
+
+      const rawPass = credPasswordType === 'auto'
         ? `temp_${Math.floor(1000 + Math.random() * 9000)}`
         : credManualPassword;
+      const encryptedUserPass = encryptPassword(rawPass);
 
       if (registryRole === 'student') {
         if (!regGradeLevel) {
@@ -362,7 +390,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
           emergencyContactName: regEmergencyContactName || regGuardianName || 'Advisory Office',
           emergencyContactPhone: regEmergencyContactPhone ? `${matchedCountry.code} ${regEmergencyContactPhone.replace(/\D/g, '')}` : matchedCountry.code + ' 8010000001',
           username: finalUsername,
-          password: finalPassword,
+          password: encryptedUserPass,
           isActiveAccount: true,
           forcePasswordChange: credForcePasswordChange
         });
@@ -375,7 +403,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
           bio: regBio || 'Faculty Specialist',
           avatar: finalPhoto,
           username: finalUsername,
-          password: finalPassword,
+          password: encryptedUserPass,
           isActiveAccount: true,
           forcePasswordChange: credForcePasswordChange,
           subjects: regAcademicDepartments.length > 0 ? regAcademicDepartments : [regDepartment],
@@ -572,8 +600,8 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
   // Submit handlers for Parent Accounts
   const handleRegisterParent = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!parentFormName || !parentFormEmail || !parentFormPassword) {
-      alert('Kindly fill in the parent’s name, email, and password.');
+    if (!parentFormName || !parentFormEmail) {
+      alert('Kindly fill in the parent’s name and email.');
       return;
     }
 
@@ -586,12 +614,17 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
 
     const finalPhone = `${matchedCountry.code} ${cleanDigits}`;
 
+    const parentGenUsername = `parent-${parentFormName.toLowerCase().split(' ')[0] || 'parent'}`;
+    const rawPassParent = parentFormPassword || `parent_${Math.floor(1000 + Math.random() * 9000)}`;
+    const encryptedParentPass = encryptPassword(rawPassParent);
+
     if (isEditingParent && editingParentId) {
       updateParent(editingParentId, {
         name: parentFormName,
+        username: parentGenUsername,
         email: parentFormEmail,
         phone: finalPhone,
-        password: parentFormPassword,
+        password: encryptedParentPass,
         address: parentFormAddress,
         avatar: parentFormAvatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
         studentIds: parentFormSelectedStudentIds,
@@ -600,15 +633,16 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
         state: parentFormState,
         lga: parentFormLGA
       });
-      setParentSuccessMsg('Parent account successfully updated!');
+      setParentSuccessMsg(`Parent account successfully updated! Username: ${parentGenUsername}`);
     } else {
       const newPId = 'PAR-' + Math.floor(100000 + Math.random() * 900000);
       addParent({
         id: newPId,
         name: parentFormName,
+        username: parentGenUsername,
         email: parentFormEmail,
         phone: finalPhone,
-        password: parentFormPassword,
+        password: encryptedParentPass,
         address: parentFormAddress,
         avatar: parentFormAvatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
         studentIds: parentFormSelectedStudentIds,
@@ -617,7 +651,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
         state: parentFormState,
         lga: parentFormLGA
       });
-      setParentSuccessMsg('New Parent account created and linked!');
+      setParentSuccessMsg(`New Parent account created! Auto-credentials: Username is "${parentGenUsername}" & password is "${rawPassParent}".`);
     }
 
     // Reset parent form
@@ -636,6 +670,62 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
       setParentFormState('Lagos');
       setParentFormLGA('Ikeja');
     }, 2500);
+  };
+
+  // Submit handlers for Additional Admin Accounts
+  const handleRegisterAdmin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAdminFormError('');
+    setAdminFormSuccess('');
+
+    if (!adminFormName || !adminFormEmail) {
+      setAdminFormError('Kindly provide the Admin Name and Email Address.');
+      return;
+    }
+
+    const parentGenUsername = adminFormUsername.trim() || `admin-${adminFormName.toLowerCase().split(' ')[0] || 'helper'}`;
+    const rawPassAdmin = adminFormPassword.trim() || `admin_${Math.floor(1000 + Math.random() * 9000)}`;
+    const encryptedPass = encryptPassword(rawPassAdmin);
+
+    if (isEditingAdmin && editingAdminId) {
+      updateAdmin(editingAdminId, {
+        name: adminFormName,
+        username: parentGenUsername.toLowerCase(),
+        email: adminFormEmail.toLowerCase(),
+        phone: adminFormPhone,
+        password: encryptedPass,
+        permissions: adminFormPermissions,
+        avatar: adminFormAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'
+      });
+      setAdminFormSuccess(`Administrator account successfully updated! Username: ${parentGenUsername.toLowerCase()}`);
+    } else {
+      addAdmin({
+        name: adminFormName,
+        username: parentGenUsername.toLowerCase(),
+        email: adminFormEmail.toLowerCase(),
+        phone: adminFormPhone,
+        password: encryptedPass,
+        role: 'admin',
+        permissions: adminFormPermissions,
+         isActiveAccount: true,
+        avatar: adminFormAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'
+      });
+      setAdminFormSuccess(`New Administrator account created! Auto-credentials: Username is "${parentGenUsername.toLowerCase()}" & password is "${rawPassAdmin}".`);
+    }
+
+    // Reset fields
+    setTimeout(() => {
+      setAdminFormSuccess('');
+      setIsEditingAdmin(false);
+      setEditingAdminId(null);
+      setAdminFormName('');
+      setAdminFormUsername('');
+      setAdminFormPassword('');
+      setAdminFormEmail('');
+      setAdminFormPhone('');
+      setAdminFormPermissions(['user_management', 'grades']);
+      setAdminFormAvatar('');
+    }, 4500);
   };
 
   // Submit handlers for Payment Categories
@@ -824,43 +914,44 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
       {activeTab === 'users' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* User Registration Form */}
-          <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 font-sans">
-            {activeRosterTab === 'parents' ? (
-              <div className="space-y-4 animate-fade-in text-natural-charcoal">
-                <div>
-                  <h4 className="font-extrabold text-[#1A365D] text-sm">{isEditingParent ? 'Edit' : 'Register'} Parent / Guardian Profile</h4>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">{isEditingParent ? 'Modify parent fields & links' : 'Add new guardian account to system ledger'}</span>
-                </div>
+          {activeRosterTab !== 'logs' && (
+            <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 font-sans">
+              {activeRosterTab === 'parents' ? (
+                <div className="space-y-4 animate-fade-in text-natural-charcoal">
+                  <div>
+                    <h4 className="font-extrabold text-[#1A365D] text-sm">{isEditingParent ? 'Edit' : 'Register'} Parent / Guardian Profile</h4>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">{isEditingParent ? 'Modify parent fields & links' : 'Add new guardian account to system ledger'}</span>
+                  </div>
 
-                <form onSubmit={handleRegisterParent} className="space-y-4">
-                  <div className="space-y-3.5 pt-1">
-                    <h5 className="text-[10px] font-black uppercase text-indigo-650 tracking-widest border-b pb-1">1. Contact Identity</h5>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Parent Full Name *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Robert Alvarez"
-                          value={parentFormName}
-                          onChange={(e) => setParentFormName(e.target.value)}
-                          className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none"
-                        />
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <form onSubmit={handleRegisterParent} className="space-y-4">
+                    <div className="space-y-3.5 pt-1">
+                      <h5 className="text-[10px] font-black uppercase text-indigo-650 tracking-widest border-b pb-1">1. Contact Identity</h5>
+                      <div className="space-y-3">
                         <div>
-                          <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Email *</label>
+                          <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Parent Full Name *</label>
                           <input
-                            type="email"
+                            type="text"
                             required
-                            placeholder="e.g. robert.alvarez@email.com"
-                            value={parentFormEmail}
-                            onChange={(e) => setParentFormEmail(e.target.value)}
-                            className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none font-mono"
+                            placeholder="e.g. Robert Alvarez"
+                            value={parentFormName}
+                            onChange={(e) => setParentFormName(e.target.value)}
+                            className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none"
                           />
                         </div>
-                        <div>
-                          <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Phone Number *</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Email *</label>
+                            <input
+                              type="email"
+                              required
+                              placeholder="e.g. robert.alvarez@email.com"
+                              value={parentFormEmail}
+                              onChange={(e) => setParentFormEmail(e.target.value)}
+                              className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none font-mono"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Phone Number *</label>
                           <div className="flex gap-1.5">
                             <span className="bg-slate-100 border border-slate-200 text-slate-600 rounded-lg px-2 py-1.5 text-xs font-mono self-center">
                               {countriesList.find(c => c.name === parentFormCountry)?.code || '+234'}
@@ -1039,6 +1130,155 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                     <div className="p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 animate-bounce" /> {parentSuccessMsg}
                     </div>
+                  )}
+                </form>
+              </div>
+            ) : activeRosterTab === 'admins' ? (
+              <div className="space-y-4 animate-fade-in text-natural-charcoal">
+                <div>
+                  <h4 className="font-extrabold text-[#1A365D] text-sm">{isEditingAdmin ? 'Edit' : 'Register'} Platform Admin Account</h4>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">{isEditingAdmin ? 'Modify administrator fields & override permissions' : 'Add new helper admin login credentials'}</span>
+                </div>
+
+                {adminFormError && (
+                  <div className="p-3 bg-red-50 text-red-800 border border-red-200 rounded-xl text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-650 shrink-0" />
+                    <span>{adminFormError}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleRegisterAdmin} className="space-y-4">
+                  <div className="space-y-3.5 pt-1">
+                    <h5 className="text-[10px] font-black uppercase text-indigo-650 tracking-widest border-b pb-1">1. Contact Identity</h5>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Admin Full Name *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. Sandra Jenkins"
+                          value={adminFormName}
+                          onChange={(e) => setAdminFormName(e.target.value)}
+                          className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Email Connection *</label>
+                          <input
+                            type="email"
+                            required
+                            placeholder="sandra@academy.org"
+                            value={adminFormEmail}
+                            onChange={(e) => setAdminFormEmail(e.target.value)}
+                            className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Phone Number</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. +234 803 111 2222"
+                            value={adminFormPhone}
+                            onChange={(e) => setAdminFormPhone(e.target.value)}
+                            className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 pt-1">
+                    <h5 className="text-[10px] font-black uppercase text-indigo-650 tracking-widest border-b pb-1">2. Custom Credentials Override</h5>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Username (Empty for Auto-Gen)</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. sandra.admin"
+                          value={adminFormUsername}
+                          onChange={(e) => setAdminFormUsername(e.target.value)}
+                          className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[9px] font-bold uppercase text-slate-400 mb-1">Password (Empty for Auto-Gen)</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. passcode123"
+                          value={adminFormPassword}
+                          onChange={(e) => setAdminFormPassword(e.target.value)}
+                          className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 pt-1">
+                    <h5 className="text-[10px] font-black uppercase text-indigo-650 tracking-widest border-b pb-1">3. Role Permissions Scope</h5>
+                    <div className="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
+                      {[
+                        { label: 'User Registration', val: 'user_management' },
+                        { label: 'Financial ledger', val: 'finances' },
+                        { label: 'Academic grades', val: 'grades' },
+                        { label: 'CBT examination', val: 'cbt' }
+                      ].map(perm => {
+                        const hasPerm = adminFormPermissions.includes(perm.val);
+                        return (
+                          <label key={perm.val} className="flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={hasPerm}
+                              onChange={() => {
+                                if (hasPerm) {
+                                  setAdminFormPermissions(prev => prev.filter(p => p !== perm.val));
+                                } else {
+                                  setAdminFormPermissions(prev => [...prev, perm.val]);
+                                }
+                              }}
+                              className="rounded text-[#1A365D]"
+                            />
+                            <span>{perm.label}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      type="submit"
+                      className="flex-1 py-3 bg-[#1A365D] hover:bg-[#1A365D]/90 text-white font-bold uppercase text-xs tracking-wider rounded-xl cursor-pointer shadow-md transition-colors"
+                    >
+                      {isEditingAdmin ? 'Commit Updates' : 'Register Admin Account'}
+                    </button>
+                    {isEditingAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsEditingAdmin(false);
+                          setEditingAdminId(null);
+                          setAdminFormName('');
+                          setAdminFormUsername('');
+                          setAdminFormPassword('');
+                          setAdminFormEmail('');
+                          setAdminFormPhone('');
+                          setAdminFormPermissions(['user_management', 'grades']);
+                        }}
+                        className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold uppercase text-xs tracking-wider rounded-xl cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+
+                  {adminFormSuccess && (
+                     <div className="p-3 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs flex flex-col gap-1">
+                       <span className="flex items-center gap-2 font-bold text-emerald-900 border-b border-emerald-200/50 pb-1">
+                         <CheckCircle2 className="w-4 h-4 text-emerald-600 animate-bounce" /> Action completed!
+                       </span>
+                       <span className="leading-relaxed text-[11px] font-medium">{adminFormSuccess}</span>
+                     </div>
                   )}
                 </form>
               </div>
@@ -1717,8 +1957,9 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
               )}
             </form>
           </div>
-          )}
-        </div>
+        )}
+      </div>
+    )}
 
         {/* Roster lists cards split */}
         <div className="lg:col-span-7 space-y-6">
@@ -2428,7 +2669,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                       <div className="text-center border-b border-[#C29B38]/40 pb-3 flex items-center justify-center gap-2">
                         <div className="w-8 h-8 bg-white p-0.5 rounded-full flex items-center justify-center shadow-xs shrink-0">
                           <img 
-                            src="/src/assets/images/school_logo_1779413996009.png" 
+                            src="/logo.png" 
                             alt="NUA Logo" 
                             className="w-7 h-7 object-contain"
                             referrerPolicy="no-referrer"
@@ -2834,7 +3075,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                       <div className="text-center border-b border-[#C29B38]/40 pb-3 flex items-center justify-center gap-2">
                         <div className="w-8 h-8 bg-white p-0.5 rounded-full flex items-center justify-center shadow-xs shrink-0">
                           <img 
-                            src="/src/assets/images/school_logo_1779413996009.png" 
+                            src="/logo.png" 
                             alt="NUA Logo" 
                             className="w-7 h-7 object-contain"
                             referrerPolicy="no-referrer"
