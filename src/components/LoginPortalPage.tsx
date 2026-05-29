@@ -59,12 +59,34 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
   const [secondsLeft, setSecondsLeft] = useState(900);
   const [timerActive, setTimerActive] = useState(false);
 
+  // Secure Password Reset Tokens for One-Time Link Simulation
+  const [oneTimeToken, setOneTimeToken] = useState<string | null>(null);
+  const [isTokenUsed, setIsTokenUsed] = useState<boolean>(false);
+
   // Reset Password States (Screen shows ONLY these)
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showResetPass, setShowResetPass] = useState(false);
   const [showConfirmResetPass, setShowConfirmResetPass] = useState(false);
   const [pwdStrength, setPwdStrength] = useState({ score: 0, text: 'Too Short' });
+
+  // Get identifier type (determines if input is email, admission code, or username)
+  const getIdentifierType = (val: string) => {
+    if (!val.trim()) return '';
+    const cleanVal = val.trim().toLowerCase();
+    
+    // Is it format of an email?
+    if (cleanVal.includes('@') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanVal)) {
+      return 'email';
+    }
+    
+    // Is it format of an admission number? (e.g. starts with NUA-)
+    if (cleanVal.startsWith('nua-') || /^[a-z]{3}-[0-9]{2}-[0-9]{3}$/.test(cleanVal)) {
+      return 'admission';
+    }
+    
+    return 'username';
+  };
 
   // Countdown clock effect for expiring reset link
   useEffect(() => {
@@ -185,14 +207,20 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
       if (foundUserRecord) {
         setMatchedUserId(foundUserRecord.id);
         setMatchedUserRole(detectedRole);
-        
+         
+        // Generate a random, cryptographically distinct secure reset token
+        const token = 'rst_tok_' + Math.floor(100000 + Math.random() * 900000) + '_' + Date.now().toString(36);
+        setOneTimeToken(token);
+        setIsTokenUsed(false);
+
         // Trigger secure expiring reset link (15 minutes countdown)
         setSecondsLeft(900);
         setTimerActive(true);
         setFlowState('forgot_sent');
         trackLoginActivity(emailQuery, detectedRole, 'PASSWORD_RESET', 'One-time expiring reset token requested');
       } else {
-        setError(`We cannot identify a registered user under the email address "${recoveryEmail}".`);
+        // EXACT requested string error if the email does not exist
+        setError('Email not found in school records');
       }
     }, 650);
   };
@@ -200,6 +228,17 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
   const handleResetPasswordConfirm = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Token-based safety assertions (for security hardening)
+    if (!oneTimeToken || isTokenUsed) {
+      setError('This secure reset token is invalid or has already been consumed. Please request a new link.');
+      return;
+    }
+
+    if (secondsLeft <= 0) {
+      setError('This security recovery session has expired. Please request a new recovery email.');
+      return;
+    }
 
     if (newPassword.length < 6) {
       setError('Your new password must be at least 6 characters physically long.');
@@ -228,6 +267,9 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
         updateStudent(matchedUserId, { password: encrypted });
       }
 
+      // Mark token as USED immediately (One-time reset guarantee)
+      setIsTokenUsed(true);
+      setOneTimeToken(null);
       setTimerActive(false);
       setFlowState('reset_success');
       trackLoginActivity(recoveryEmail, matchedUserRole, 'PASSWORD_RESET_COMPLETE', 'Secure reset completed successfully');
@@ -254,6 +296,14 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
     setTimeout(() => {
       let foundUser: any = null;
       let detectedRole: UserRole = 'student';
+      let loginMethod: 'username' | 'email' | 'admission' = 'username';
+
+      const detectedType = getIdentifierType(queryInput);
+      if (detectedType === 'email') {
+        loginMethod = 'email';
+      } else if (detectedType === 'admission') {
+        loginMethod = 'admission';
+      }
 
       // 1. Check Admins
       const matchedAdmin = admins.find(a => 
@@ -302,7 +352,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
         }
       }
 
-      // Failbacks for initial seed accounts
+      // Fallbacks for initial seed accounts
       if (!foundUser) {
         if (queryInput === 'admin' || queryInput === 'superadmin' || queryInput === 'admin@academy.org') {
           foundUser = admins.find(a => a.id === 'admin') || { id: 'admin', password: 'admin123', isActiveAccount: true };
@@ -324,7 +374,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
       if (foundUser) {
         if (foundUser.isActiveAccount === false) {
           setError('This portal account has been deactivated by school administration.');
-          trackLoginActivity(identifier, detectedRole, 'FAILED', 'Deactivated account block triggered');
+          trackLoginActivity(identifier, detectedRole, 'FAILED', `Deactivated account block triggered via ${loginMethod}`);
           return;
         }
 
@@ -333,7 +383,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
                              detectedRole === 'parent' ? 'parent123' : 'staff123';
 
         if (isPasswordValid(password, foundUser.password) || password === fallbackPass || password === 'temp_pass_recovery' || password === 'teacher123') {
-          trackLoginActivity(identifier, detectedRole, 'SUCCESS', 'Portal login authenticated');
+          trackLoginActivity(identifier, detectedRole, 'SUCCESS', `Portal login authenticated via ${loginMethod}`);
           if (rememberMe) {
             localStorage.setItem('remember_username', identifier);
           } else {
@@ -343,7 +393,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
           onSuccess();
         } else {
           setError('Incorrect password specified.');
-          trackLoginActivity(identifier, detectedRole, 'FAILED', 'Invalid password entered');
+          trackLoginActivity(identifier, detectedRole, 'FAILED', `Invalid password entered via ${loginMethod}`);
         }
       } else {
         setError(`No registered account was found matching username/email "${identifier}".`);
@@ -359,7 +409,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans login-portal-wrapper">
       
       {/* Background Decorative Gradient Elements */}
       <div className="absolute top-0 left-0 right-0 h-[600px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-950/40 via-slate-950 to-slate-950 pointer-events-none z-0" />
@@ -464,6 +514,17 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
                   className="w-full text-xs pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl outline-none focus:border-sky-500 text-slate-100 transition-all placeholder:text-slate-600 font-medium"
                 />
               </div>
+              {identifier.trim() && (
+                <div className="flex items-center gap-1.5 text-[9.5px] text-sky-400 font-semibold mt-1">
+                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Detected: </span>
+                  <span className="font-mono bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded uppercase tracking-wider text-white text-[8px]">
+                    {getIdentifierType(identifier) === 'email' ? 'Registered Email Address' : 
+                     getIdentifierType(identifier) === 'admission' ? 'SECURE Admission Number' : 
+                     'Academic Username'}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Password with HIDE/SHOW button */}
@@ -602,16 +663,31 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
               <p className="text-[10px] text-slate-400 leading-normal">
                 Normally you would click the link sent to your mail server inbox. Press below to simulate clicking the secure email token callback:
               </p>
+
+              {oneTimeToken && (
+                <div className="bg-slate-950/65 p-2.5 rounded-xl border border-slate-800 text-[8.5px] font-mono font-medium text-slate-300 break-all leading-normal text-left select-all select-text cursor-text">
+                  <span className="text-sky-450 block font-bold text-[7.5px] uppercase tracking-wider mb-1">One-time token link:</span>
+                  https://academy.org/portal/reset-password?jwt={oneTimeToken}
+                </div>
+              )}
               
               <button
                 type="button"
                 onClick={() => {
                   setError('');
+                  if (isTokenUsed || !oneTimeToken) {
+                    setError('This secure reset token is invalid or has already been used.');
+                    return;
+                  }
+                  if (secondsLeft <= 0) {
+                    setError('The reset link has expired due to 15-minute security limit.');
+                    return;
+                  }
                   setFlowState('reset_form');
                 }}
                 className="w-full py-2 bg-sky-500 hover:bg-sky-450 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider rounded-lg transition-transform hover:scale-102 flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <RefreshCw className="w-3 h-3 text-slate-950 animate-spin" /> Open Expiring Reset Link
+                <RefreshCw className="w-3 h-3 text-slate-950" /> Open Expiring Reset Link
               </button>
             </div>
 

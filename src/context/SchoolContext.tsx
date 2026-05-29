@@ -156,6 +156,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       admissionNumber: s.admissionNumber || `NUA-26-004${idx + 1}`,
       username: s.username || `NUA/2026/${String(idx + 1).padStart(3, '0')}`,
       password: s.password || 'student123',
+      email: s.email || `${s.name.toLowerCase().replace(/\s/g, '.') || 'student' + (idx+1)}@academy.org`,
       gender: s.gender || (idx % 2 === 0 ? 'Male' : 'Female'),
       dateOfBirth: s.dateOfBirth || (idx % 2 === 0 ? '2008-04-12' : '2009-09-24'),
       nationality: s.nationality || 'Nigeria',
@@ -187,6 +188,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         ...t,
         username: t.username || `edu_${lastName}${idx + 1}`,
         password: t.password || 'teacher123',
+        email: t.email || `edu.${lastName}${idx + 1}@academy.org`,
         isActiveAccount: t.isActiveAccount !== undefined ? t.isActiveAccount : true,
         forcePasswordChange: t.forcePasswordChange !== undefined ? t.forcePasswordChange : false,
         subjects: t.subjects || [t.department, 'Foundation Science'],
@@ -261,7 +263,18 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [parents, setParents] = useState<Parent[]>(() => {
     const saved = localStorage.getItem('parents');
-    return saved ? JSON.parse(saved) : initialParents;
+    const parsed = saved ? JSON.parse(saved) : initialParents;
+    return parsed.map((p: Parent, idx: number) => {
+      const parts = p.name.split(' ');
+      const firstName = parts[0]?.toLowerCase() || 'parent';
+      return {
+        ...p,
+        username: p.username || `parent-${firstName}`,
+        password: p.password || 'parent123',
+        email: p.email || `${firstName}.guardian@mail.com`,
+        isActiveAccount: p.isActiveAccount !== undefined ? p.isActiveAccount : true
+      };
+    });
   });
 
   const [paymentCategories, setPaymentCategories] = useState<PaymentCategory[]>(() => {

@@ -133,7 +133,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
   const adminNewsList = notifications.length > 0 ? notifications.slice(0, 3) : demoAnnouncements;
 
   return (
-    <div className="min-h-screen bg-neutral-bg text-[#f1f5f9] font-sans selection:bg-sky-500/20 antialiased relative">
+    <div className="min-h-screen bg-neutral-bg text-[#f1f5f9] font-sans selection:bg-sky-500/20 antialiased relative landing-page-wrapper">
       
       {/* Absolute faint background watermark for the landing view */}
       <div className="absolute top-20 right-0 left-0 bottom-0 pointer-events-none overflow-hidden z-0 select-none">
