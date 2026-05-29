@@ -27,6 +27,32 @@ interface PortalLayoutProps {
 export default function PortalLayout({ children, activeTab, setActiveTab, onLogout }: PortalLayoutProps) {
   const { currentRole, currentUserId, students, teachers, setRole } = useSchool();
 
+  // Automatic logout on inactivity (15 Minutes)
+  React.useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        onLogout();
+      }, 15 * 60 * 1000); // 15 Minutes
+    };
+
+    const trackedEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    trackedEvents.forEach(name => {
+      document.addEventListener(name, resetTimer);
+    });
+
+    resetTimer();
+
+    return () => {
+      clearTimeout(timeoutId);
+      trackedEvents.forEach(name => {
+        document.removeEventListener(name, resetTimer);
+      });
+    };
+  }, [onLogout]);
+
   // Find info about the current loaded user
   let currentProfileName = 'Administrator';
   let currentProfileSub = 'Main Campus Hub';

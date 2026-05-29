@@ -35,7 +35,7 @@ export default function StudentDirectorySearch({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Close suggestions popover on clicking outside
+  // Close suggestions popover on clicking text outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -51,11 +51,11 @@ export default function StudentDirectorySearch({
     const cleanQuery = query.trim().toLowerCase();
     if (!cleanQuery) return true;
 
+    // Split candidate name parts: Adebayo, Benson, Adeniyi etc. This supports searching by parts of names
     const nameParts = studentName.toLowerCase().split(/\s+/);
     const queryParts = cleanQuery.split(/\s+/);
 
-    // 1. Check if ANY query word matches or is a prefix/substring of any single part in the name
-    // e.g. "Ade" matches "Adebayo" or "Adeniyi" or "Adelakun"
+    // Typing " Ade" matches "Adebayo" or "Adeniyi" or "Adelakun"
     // Also "Ade Adeniran" matches "Adebayo Adeniran"
     return queryParts.every(qPart => 
       nameParts.some(nPart => nPart.includes(qPart))
@@ -121,7 +121,7 @@ export default function StudentDirectorySearch({
       <span>
         {parts.map((part, index) => 
           part.toLowerCase() === cleanSearch ? (
-            <span key={index} className="bg-amber-100 text-amber-900 font-extrabold px-0.5 rounded">
+            <span key={index} className="bg-sky-500/20 text-sky-400 font-extrabold px-1 rounded">
               {part}
             </span>
           ) : (
@@ -141,24 +141,24 @@ export default function StudentDirectorySearch({
   const activeClasses = getRepresentedClasses();
 
   return (
-    <div className="space-y-4 font-sans text-slate-800" ref={dropdownRef}>
+    <div className="space-y-4 font-sans text-slate-300" ref={dropdownRef}>
       
       {/* SEARCH AND INTERACTIVE AUTO-SUGGESTION CONTROLLER */}
       <div className="relative">
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
+            <Search className="w-4 h-4 text-sky-400 absolute left-3.5 top-3.5" />
             <input
               ref={inputRef}
               type="text"
-              placeholder="Search first, middle, surname, admission no, or class placement..."
+              placeholder="Search first, middle, surname, admission number or class..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setShowSuggestions(true);
               }}
               onFocus={() => setShowSuggestions(true)}
-              className="w-full text-xs pl-9 pr-10 py-3 bg-white border border-slate-200 focus:border-indigo-500 rounded-2xl outline-none shadow-xs transition-all placeholder:text-slate-400 font-medium"
+              className="w-full text-xs pl-10 pr-10 py-3 bg-slate-900 border border-slate-800 focus:border-sky-500 rounded-2xl outline-none shadow-md transition-all placeholder:text-slate-500 text-slate-100 font-semibold"
             />
             {searchQuery && (
               <button
@@ -167,25 +167,25 @@ export default function StudentDirectorySearch({
                   setSearchQuery('');
                   setShowSuggestions(false);
                 }}
-                className="absolute right-3 top-3 p-1 rounded-full hover:bg-slate-100 text-slate-425 hover:text-slate-600 transition"
+                className="absolute right-3 top-3 p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
 
-          {/* QUICK SUMMARY BADGE INDICES */}
-          <div className="shrink-0 flex items-center justify-between px-4 py-2.5 bg-indigo-50/50 rounded-2xl border border-indigo-100/40 text-[10px] font-bold text-indigo-700 select-none uppercase tracking-wide">
+          {/* QUICK SUMMARY INDEX */}
+          <div className="shrink-0 flex items-center justify-between px-4 py-2.5 bg-slate-900/60 border border-slate-800 rounded-2xl text-[10px] font-black text-sky-400 select-none uppercase tracking-widest">
             <span>Result Pool: {filteredStudents.length} of {students.length} Pupils</span>
           </div>
         </div>
 
         {/* Dynamic Suggester Dropdown - Instant Match while typing */}
         {showSuggestions && searchQuery.trim().length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-slate-200/90 shadow-2xl z-50 divide-y divide-slate-150 overflow-hidden max-h-[300px] overflow-y-auto animate-fade-in">
-            <div className="px-3.5 py-1.5 bg-slate-50 text-[9px] font-black text-indigo-600/70 uppercase tracking-widest flex justify-between items-center">
-              <span>Dynamic Suggestion Matches</span>
-              <span className="font-mono text-[8px] transform scale-90">Auto-Filtered</span>
+          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl z-50 divide-y divide-slate-950 overflow-hidden max-h-[300px] overflow-y-auto animate-fade-in">
+            <div className="px-4 py-2 bg-slate-950 text-[9px] font-black text-sky-400 uppercase tracking-widest flex justify-between items-center border-b border-slate-900">
+              <span>Dynamic Suggestions Match</span>
+              <span className="font-mono text-[8px] tracking-wide text-slate-500">Live Filters Active</span>
             </div>
             {filteredStudents.slice(0, 5).map((student) => {
               const isActive = student.isActiveAccount !== false;
@@ -196,7 +196,7 @@ export default function StudentDirectorySearch({
                     setSearchQuery(student.name);
                     setShowSuggestions(false);
                   }}
-                  className="px-4 py-3 hover:bg-indigo-50/50 cursor-pointer flex items-center justify-between transition group"
+                  className="px-4 py-3 hover:bg-slate-800/60 cursor-pointer flex items-center justify-between transition group"
                 >
                   <div className="flex items-center gap-3">
                     {/* Student Passport Photo Preview in Suggestions */}
@@ -204,28 +204,28 @@ export default function StudentDirectorySearch({
                       <img
                         src={student.passportPhoto || student.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop'}
                         alt="Preview passport"
-                        className="w-8 h-8 rounded-full object-cover border border-slate-150 transition group-hover:scale-105"
+                        className="w-9 h-9 rounded-xl object-cover border border-slate-800 transition group-hover:scale-105"
                         referrerPolicy="no-referrer"
                         onError={(e) => {
                           e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop';
                         }}
                       />
-                      <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-white ${
+                      <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-slate-900 ${
                         isActive ? 'bg-emerald-500' : 'bg-rose-500'
                       }`} />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-slate-800 block">
+                      <span className="text-xs font-bold text-slate-105 block">
                         {highlightMatch(student.name, searchQuery)}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-semibold block mt-0.5">
-                        {student.admissionNumber || 'No Admission No.'} • <span className="text-indigo-650">{student.gradeLevel}</span> • Dept: <span className="font-bold text-slate-650">{student.department || 'N/A'}</span>
+                      <span className="text-[10px] text-slate-400 font-semibold block mt-0.5">
+                        {student.admissionNumber || 'No Adm.'} • <span className="text-sky-400 font-bold">{student.gradeLevel}</span> • Division: <span className="text-slate-300 font-bold">{student.department || 'N/A'}</span>
                       </span>
                     </div>
                   </div>
                   
                   {/* Action Link within suggestion */}
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       type="button"
                       onClick={(e) => {
@@ -233,7 +233,7 @@ export default function StudentDirectorySearch({
                         onInspect(student.id);
                         setShowSuggestions(false);
                       }}
-                      className="p-1 hover:bg-white rounded-lg text-emerald-600"
+                      className="p-1.5 hover:bg-slate-950 border border-transparent hover:border-slate-800 rounded-lg text-emerald-400"
                       title="Inspect Profile"
                     >
                       <Eye className="w-3.5 h-3.5" />
@@ -245,7 +245,7 @@ export default function StudentDirectorySearch({
                         onEdit(student);
                         setShowSuggestions(false);
                       }}
-                      className="p-1 hover:bg-white rounded-lg text-indigo-600"
+                      className="p-1.5 hover:bg-slate-950 border border-transparent hover:border-slate-800 rounded-lg text-sky-400"
                       title="Edit Profile"
                     >
                       <Pencil className="w-3.5 h-3.5" />
@@ -260,8 +260,8 @@ export default function StudentDirectorySearch({
               </div>
             )}
             {filteredStudents.length > 5 && (
-              <div className="px-4 py-2 bg-slate-50 font-serif italic text-[10px] text-slate-400 text-center">
-                + {filteredStudents.length - 5} more matches. Keep typing to narrow down...
+              <div className="px-4 py-2 bg-slate-950/80 font-mono text-[9px] text-slate-500 text-center border-t border-slate-950">
+                + {filteredStudents.length - 5} more records. Limit auto-suggestions.
               </div>
             )}
           </div>
@@ -269,14 +269,14 @@ export default function StudentDirectorySearch({
       </div>
 
       {/* FILTER DRAWER / CONTROLLER RACK */}
-      <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-150 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="bg-slate-900 border border-slate-800/80 p-3.5 rounded-2xl grid grid-cols-2 md:grid-cols-4 gap-3">
         {/* Class Level */}
         <div>
-          <label className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Grade Class</label>
+          <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Grade Class</label>
           <select
             value={filterClass}
             onChange={(e) => setFilterClass(e.target.value)}
-            className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 cursor-pointer"
+            className="w-full text-xs px-2.5 py-2.5 bg-slate-950 border border-slate-850 rounded-xl outline-none text-slate-300 font-bold cursor-pointer"
           >
             <option value="all">All Classes</option>
             {activeClasses.map((cls) => (
@@ -287,11 +287,11 @@ export default function StudentDirectorySearch({
 
         {/* Department placement */}
         <div>
-          <label className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Department</label>
+          <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Department</label>
           <select
             value={filterDepartment}
             onChange={(e) => setFilterDepartment(e.target.value)}
-            className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 cursor-pointer"
+            className="w-full text-xs px-2.5 py-2.5 bg-slate-950 border border-slate-850 rounded-xl outline-none text-slate-300 font-bold cursor-pointer"
           >
             <option value="all">All Departments</option>
             <option value="science">Sciences</option>
@@ -303,11 +303,11 @@ export default function StudentDirectorySearch({
 
         {/* Gender category */}
         <div>
-          <label className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Gender Group</label>
+          <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Gender Group</label>
           <select
             value={filterGender}
             onChange={(e) => setFilterGender(e.target.value)}
-            className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 cursor-pointer"
+            className="w-full text-xs px-2.5 py-2.5 bg-slate-950 border border-slate-850 rounded-xl outline-none text-slate-300 font-bold cursor-pointer"
           >
             <option value="all">Select Gender</option>
             <option value="male">Male</option>
@@ -317,11 +317,11 @@ export default function StudentDirectorySearch({
 
         {/* System account active status */}
         <div>
-          <label className="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status Registry</label>
+          <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Status Registry</label>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="w-full text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 cursor-pointer"
+            className="w-full text-xs px-2.5 py-2.5 bg-slate-950 border border-slate-850 rounded-xl outline-none text-slate-300 font-bold cursor-pointer"
           >
             <option value="all">All Enrollees</option>
             <option value="active">Active Accounts</option>
@@ -333,35 +333,35 @@ export default function StudentDirectorySearch({
       {/* QUICK STATUS TAG BAR */}
       {(filterClass !== 'all' || filterDepartment !== 'all' || filterStatus !== 'all' || filterGender !== 'all' || searchQuery) && (
         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          <span className="text-[9px] font-bold text-slate-400 uppercase mr-1">Active filters:</span>
+          <span className="text-[9px] font-bold text-slate-500 uppercase mr-1">Active filters:</span>
           {searchQuery && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-[10px] rounded-md">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-800 text-sky-400 font-bold text-[10px] rounded-lg">
               "{searchQuery}"
-              <X className="w-2.5 h-2.5 cursor-pointer" onClick={() => setSearchQuery('')} />
+              <X className="w-3 h-3 cursor-pointer" onClick={() => setSearchQuery('')} />
             </span>
           )}
           {filterClass !== 'all' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-[10px] rounded-md">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-800 text-sky-400 font-bold text-[10px] rounded-lg">
               Class: {filterClass}
-              <X className="w-2.5 h-2.5 cursor-pointer" onClick={() => setFilterClass('all')} />
+              <X className="w-3 h-3 cursor-pointer" onClick={() => setFilterClass('all')} />
             </span>
           )}
           {filterDepartment !== 'all' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-[10px] rounded-md animate-fade-in">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-800 text-sky-400 font-bold text-[10px] rounded-lg animate-fade-in">
               Dept: {filterDepartment}
-              <X className="w-2.5 h-2.5 cursor-pointer" onClick={() => setFilterDepartment('all')} />
+              <X className="w-3 h-3 cursor-pointer" onClick={() => setFilterDepartment('all')} />
             </span>
           )}
           {filterGender !== 'all' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-[10px] rounded-md animate-fade-in">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-800 text-sky-400 font-bold text-[10px] rounded-lg animate-fade-in">
               Gender: {filterGender}
-              <X className="w-2.5 h-2.5 cursor-pointer" onClick={() => setFilterGender('all')} />
+              <X className="w-3 h-3 cursor-pointer" onClick={() => setFilterGender('all')} />
             </span>
           )}
           {filterStatus !== 'all' && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-[10px] rounded-md animate-fade-in">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-900 border border-slate-800 text-sky-400 font-bold text-[10px] rounded-lg animate-fade-in">
               Status: {filterStatus}
-              <X className="w-2.5 h-2.5 cursor-pointer" onClick={() => setFilterStatus('all')} />
+              <X className="w-3 h-3 cursor-pointer" onClick={() => setFilterStatus('all')} />
             </span>
           )}
           <button
@@ -372,7 +372,7 @@ export default function StudentDirectorySearch({
               setFilterStatus('all');
               setFilterGender('all');
             }}
-            className="text-[9px] text-[#A6802B] hover:text-[#5c4613] font-bold hover:underline ml-auto"
+            className="text-[9.5px] text-sky-400 hover:text-sky-300 font-bold hover:underline ml-auto"
           >
             Clear All
           </button>
@@ -381,81 +381,81 @@ export default function StudentDirectorySearch({
 
       {/* RESULT DIRECTORY - MOBILE RESPONSIVE CARDS vs DESKTOP LISTS VIEWGRID */}
       {filteredStudents.length === 0 ? (
-        <div className="bg-white border-2 border-dashed border-slate-200 text-slate-400 p-8 rounded-2xl flex flex-col justify-center items-center text-center space-y-2">
-          <ShieldAlert className="w-10 h-10 text-[#A6802B]/60" />
-          <h5 className="font-serif font-bold text-slate-800 text-sm">No Enrolled Target Found</h5>
-          <p className="text-[11px] max-w-sm">No student matching your specific queries represents any records. Try adjusting input keywords or filters above.</p>
+        <div className="bg-slate-900 border border-slate-800/80 text-slate-400 p-8 rounded-3xl flex flex-col justify-center items-center text-center space-y-2">
+          <ShieldAlert className="w-10 h-10 text-sky-400/40" />
+          <h5 className="font-serif font-bold text-white text-sm">No Enrolled Target Found</h5>
+          <p className="text-[11px] max-w-sm">No student matching your specific queries was found. Adjust search parameters.</p>
         </div>
       ) : (
         <div className="space-y-3">
           
           {/* 1. DESKTOP VIEW - HIGHLY DENSE PROFESSIONAL METADATA TABLE SHEET (md:block hidden) */}
-          <div className="hidden md:block bg-white border border-slate-200/85 rounded-2xl overflow-hidden shadow-xs">
-            <table className="w-full text-left text-xs text-slate-705 border-collapse">
-              <thead className="bg-slate-50/70 text-[9.5px] font-black text-slate-450 uppercase tracking-widest border-b border-slate-200">
+          <div className="hidden md:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+            <table className="w-full text-left text-xs text-slate-300 border-collapse">
+              <thead className="bg-[#060b18] text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-950">
                 <tr>
                   <th className="px-4 py-3">Student Passport / Bio</th>
                   <th className="px-4 py-3">Admission Number</th>
-                  <th className="px-4 py-3">Academic Placement</th>
+                  <th className="px-5 py-3">Academic Placement</th>
                   <th className="px-4 py-3">Department</th>
                   <th className="px-4 py-3">Guardian Sponsor</th>
                   <th className="px-4 py-3 text-right">Directory Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-sans">
+              <tbody className="divide-y divide-slate-950 font-sans">
                 {filteredStudents.map((st) => {
                   const isActive = st.isActiveAccount !== false;
                   return (
                     <tr 
                       key={st.id}
-                      className={`hover:bg-slate-50/50 transition-colors ${
-                        selectedStudentId === st.id ? 'bg-indigo-50/40' : ''
+                      className={`hover:bg-slate-800/40 transition-colors ${
+                        selectedStudentId === st.id ? 'bg-slate-800/65' : ''
                       }`}
                     >
                       {/* Name & Photo Passport */}
-                      <td className="px-4 py-3 flex items-center gap-3">
+                      <td className="px-4 py-3.5 flex items-center gap-3">
                         <div className="relative shrink-0">
                           <img
                             src={st.passportPhoto || st.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop'}
                             alt={`${st.name} Passport`}
-                            className="w-10 h-10 rounded-full object-cover border border-slate-150 shadow-xs"
+                            className="w-10 h-10 rounded-xl object-cover border border-slate-800"
                             referrerPolicy="no-referrer"
                             onError={(e) => {
                               e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop';
                             }}
                           />
-                          <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-white ${
+                          <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-slate-900 ${
                             isActive ? 'bg-emerald-500' : 'bg-rose-500'
                           }`} />
                         </div>
                         <div>
-                          <span className="font-bold text-slate-900 block">{st.name}</span>
-                          <span className="text-[10px] text-slate-400 font-semibold block">{st.email}</span>
+                          <span className="font-bold text-slate-100 block">{st.name}</span>
+                          <span className="text-[10px] text-slate-500 font-semibold block mt-0.5">{st.email}</span>
                         </div>
                       </td>
 
                       {/* Admission Code */}
                       <td className="px-4 py-3">
-                        <span className="font-mono font-bold text-slate-800 text-[11px] bg-slate-100/80 border border-slate-200/50 px-2 py-1 rounded-lg">
+                        <span className="font-mono font-bold text-sky-400 text-[10px] bg-slate-950 border border-slate-800/80 px-2.5 py-1 rounded-lg tracking-widest uppercase">
                           {st.admissionNumber || 'NUA-26-001'}
                         </span>
                       </td>
 
                       {/* Grade Class */}
-                      <td className="px-4 py-3">
+                      <td className="px-5 py-3">
                         <div className="space-y-0.5">
-                          <span className="text-xs font-extrabold text-[#1A365D] block">{st.gradeLevel}</span>
-                          <span className="text-[9px] text-slate-400 font-bold block">Joined: {st.joinedDate}</span>
+                          <span className="text-xs font-black text-slate-205 block uppercase tracking-wider">{st.gradeLevel}</span>
+                          <span className="text-[9px] text-slate-500 font-bold block">Joined: {st.joinedDate}</span>
                         </div>
                       </td>
 
                       {/* Department Block */}
                       <td className="px-4 py-3 text-[10.5px]">
-                        <span className={`px-2.5 py-1 rounded-full font-extrabold text-[9.5px] uppercase tracking-wider ${
-                          st.department === 'Science' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                          st.department === 'Art' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
-                          st.department === 'Commerce' ? 'bg-sky-50 text-sky-700 border border-sky-100' :
-                          'bg-slate-50 border border-slate-150 text-slate-500'
+                        <span className={`px-2.5 py-1 rounded-md font-extrabold text-[9px] uppercase tracking-wider border ${
+                          st.department === 'Science' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                          st.department === 'Art' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
+                          st.department === 'Commerce' ? 'bg-sky-500/10 text-sky-450 border-sky-500/20' :
+                          'bg-slate-950 border border-slate-850 text-slate-500'
                         }`}>
                           {st.department || 'N/A'}
                         </span>
@@ -463,9 +463,9 @@ export default function StudentDirectorySearch({
 
                       {/* Guardian name and phone */}
                       <td className="px-4 py-3">
-                        <div className="text-[11px] text-slate-700 font-semibold">
-                          <span>{st.guardianName}</span>
-                          <span className="block text-[9.5px] font-mono text-slate-400 tracking-tight mt-0.5">{st.guardianPhone}</span>
+                        <div className="text-[11px] text-slate-350">
+                          <span className="font-bold block">{st.guardianName}</span>
+                          <span className="block text-[9.5px] font-mono text-slate-500 tracking-tight mt-0.5">{st.guardianPhone}</span>
                         </div>
                       </td>
 
@@ -474,22 +474,22 @@ export default function StudentDirectorySearch({
                         <div className="inline-flex items-center gap-1">
                           <button
                             onClick={() => onInspect(st.id)}
-                            className="p-2 hover:bg-slate-100 text-indigo-700 hover:text-indigo-900 rounded-xl transition"
-                            title="Inspect Database Log Card"
+                            className="p-2 hover:bg-slate-950 border border-transparent hover:border-slate-800 text-emerald-400 rounded-xl transition"
+                            title="Inspect Profile"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => onEdit(st)}
-                            className="p-2 hover:bg-slate-100 text-teal-600 hover:text-teal-850 rounded-xl transition"
-                            title="Edit Student Profile Data"
+                            className="p-2 hover:bg-slate-950 border border-transparent hover:border-slate-800 text-sky-400 rounded-xl transition"
+                            title="Edit Student File"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => onDelete(st.id)}
-                            className="p-2 hover:bg-rose-50 text-rose-500 hover:text-rose-700 rounded-xl transition"
-                            title="Expel Student File"
+                            className="p-2 hover:bg-red-950/40 border border-transparent hover:border-red-900/30 text-rose-400 rounded-xl transition"
+                            title="Expel Student"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -509,8 +509,8 @@ export default function StudentDirectorySearch({
               return (
                 <div 
                   key={st.id}
-                  className={`bg-white border p-4 rounded-2xl shadow-xs space-y-3.5 transition flex flex-col justify-between ${
-                    selectedStudentId === st.id ? 'border-indigo-500 bg-indigo-50/10' : 'border-slate-200'
+                  className={`bg-slate-900 border p-4 rounded-3xl shadow-md space-y-3.5 transition flex flex-col justify-between ${
+                    selectedStudentId === st.id ? 'border-sky-500/40' : 'border-slate-800'
                   }`}
                 >
                   {/* Top: Passport Photo and main details */}
@@ -519,62 +519,62 @@ export default function StudentDirectorySearch({
                       <img
                         src={st.passportPhoto || st.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop'}
                         alt={`${st.name} Passport`}
-                        className="w-12 h-12 rounded-xl object-cover border border-slate-150"
+                        className="w-12 h-12 rounded-2xl object-cover border border-slate-800"
                         referrerPolicy="no-referrer"
                         onError={(e) => {
                           e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop';
                         }}
                       />
-                      <span className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border border-white ${
+                      <span className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-slate-900 ${
                         isActive ? 'bg-emerald-500' : 'bg-rose-500'
                       }`} />
                     </div>
 
-                    <div className="space-y-0.5 flex-1 min-w-0">
+                    <div className="space-y-0.5 flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-extrabold text-slate-905 text-sm truncate">{st.name}</span>
+                        <span className="font-extrabold text-white text-xs uppercase tracking-wide truncate">{st.name}</span>
                         {!isActive && (
-                          <span className="text-[7px] uppercase font-bold text-rose-600 bg-rose-50 border border-rose-100 px-1 rounded">Suspended</span>
+                          <span className="text-[7px] uppercase font-black text-rose-400 bg-rose-500/10 border border-rose-500/20 px-1.5 py-0.5 rounded leading-none">Suspended</span>
                         )}
                       </div>
                       
-                      <div className="flex items-center gap-2 text-[10px] text-slate-500 font-semibold select-none">
-                        <span className="bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded uppercase font-bold">{st.gradeLevel}</span>
+                      <div className="flex items-center gap-2 text-[10px] text-slate-400 font-semibold select-none pt-0.5">
+                        <span className="bg-sky-500/10 text-sky-400 font-extrabold px-1.5 py-0.5 rounded text-[8.5px] uppercase border border-sky-500/20 leading-none">{st.gradeLevel}</span>
                         <span>•</span>
-                        <span className="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-bold">{st.department || 'General'}</span>
+                        <span className="bg-slate-950 text-slate-350 px-1.5 py-0.5 rounded border border-slate-800 leading-none">{st.department || 'General'}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Body details metadata row */}
-                  <div className="grid grid-cols-2 gap-2 bg-slate-50/55 p-2.5 rounded-xl border border-slate-150 text-[10px] leading-relaxed">
+                  <div className="grid grid-cols-2 gap-2 bg-slate-950 p-2.5 rounded-2xl border border-slate-800 text-[10px] leading-relaxed text-left">
                     <div>
-                      <span className="text-slate-400 uppercase font-bold block mb-0.5">Admin No.</span>
-                      <span className="font-mono font-bold text-slate-800">{st.admissionNumber || 'N/A'}</span>
+                      <span className="text-slate-500 uppercase font-black text-[8px] tracking-wider block mb-0.5">Admin No.</span>
+                      <span className="font-mono font-bold text-sky-400 tracking-wider">{st.admissionNumber || 'N/A'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 uppercase font-bold block mb-0.5">Guardian Sponsor</span>
-                      <span className="font-bold text-slate-800 tracking-tight block truncate">{st.guardianName}</span>
+                      <span className="text-slate-500 uppercase font-black text-[8px] tracking-wider block mb-0.5">Guardian Sponsor</span>
+                      <span className="font-bold text-slate-200 tracking-tight block truncate">{st.guardianName}</span>
                     </div>
                   </div>
 
                   {/* Actions bar at bottom with safe 44px tap target height profiles */}
-                  <div className="flex gap-1.5">
+                  <div className="flex gap-1.5 pt-1">
                     <button
                       onClick={() => onInspect(st.id)}
-                      className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 font-bold text-slate-800 rounded-xl text-[10.5px] uppercase flex items-center justify-center gap-1 cursor-pointer transition"
+                      className="flex-1 py-2.5 bg-slate-950 border border-slate-800 hover:bg-slate-850 font-bold text-slate-300 rounded-xl text-[10.5px] uppercase flex items-center justify-center gap-1 cursor-pointer transition h-11"
                     >
                       <Eye className="w-3.5 h-3.5" /> Inspect
                     </button>
                     <button
                       onClick={() => onEdit(st)}
-                      className="flex-1 py-2 bg-[#1A365D] text-white hover:bg-[#152e50] font-bold rounded-xl text-[10.5px] uppercase flex items-center justify-center gap-1 cursor-pointer transition"
+                      className="flex-1 py-2.5 bg-sky-600 text-white hover:bg-sky-500 font-bold rounded-xl text-[10.5px] uppercase flex items-center justify-center gap-1 cursor-pointer transition h-11"
                     >
                       <Pencil className="w-3.5 h-3.5" /> Edit
                     </button>
                     <button
                       onClick={() => onDelete(st.id)}
-                      className="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center cursor-pointer transition"
+                      className="py-2.5 px-3 bg-red-950/20 border border-red-900/30 text-rose-400 rounded-xl flex items-center justify-center cursor-pointer transition h-11"
                       title="Expel Student"
                     >
                       <Trash2 className="w-4 h-4" />
