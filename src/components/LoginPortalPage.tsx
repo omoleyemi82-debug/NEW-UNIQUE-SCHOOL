@@ -647,10 +647,10 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
               <span>Reset link session expires in: <span className="font-mono text-white font-extrabold">{formatTimer(secondsLeft)}</span></span>
             </div>
 
-            {/* Input 1: New Password */}
+            {/* Input 1: Set New Password */}
             <div className="space-y-1.5">
               <label className="block text-[8.5px] font-bold uppercase tracking-wider text-slate-400">
-                1. New Password
+                Set New Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-sky-400" />
@@ -696,7 +696,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
             {/* Input 2: Confirm Password */}
             <div className="space-y-1.5">
               <label className="block text-[8.5px] font-bold uppercase tracking-wider text-slate-400">
-                2. Confirm Password
+                Confirm Password
               </label>
               <div className="relative">
                 <LockKeyhole className="absolute left-3.5 top-3.5 w-4 h-4 text-sky-400" />

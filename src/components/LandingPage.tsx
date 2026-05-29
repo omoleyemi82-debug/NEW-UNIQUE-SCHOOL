@@ -184,7 +184,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                 currentTab === 'about' ? 'text-sky-400 border-sky-400' : 'border-transparent hover:text-sky-300'
               }`}
             >
-              Our Pillars
+              About School
             </button>
             <button 
               onClick={() => setCurrentTab('academics')}
@@ -200,7 +200,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                 currentTab === 'events' ? 'text-sky-400 border-sky-400' : 'border-transparent hover:text-sky-300'
               }`}
             >
-              School Activities
+              Events
             </button>
             <button 
               onClick={() => setCurrentTab('contact')}
@@ -267,7 +267,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('about'); }}
               className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
             >
-              Our Pillars
+              About School
             </button>
             <button 
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('academics'); }}
@@ -279,7 +279,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('events'); }}
               className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
             >
-              Activities
+              Events
             </button>
             <button 
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('contact'); }}
@@ -334,7 +334,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                   onClick={() => setCurrentTab('about')}
                   className="px-6 py-3.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 font-bold text-[11px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer leading-none"
                 >
-                  Explore Our Pillars
+                  Explore About School
                 </button>
               </div>
             </div>

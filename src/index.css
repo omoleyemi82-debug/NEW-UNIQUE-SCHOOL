@@ -6,13 +6,27 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --color-natural-bg: #0b1329;
-  --color-natural-sidebar: #060b18;
+  /* Premium override of standard slate classes to achieve a "Classic Fancy" Academic Royal Navy aesthetic */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-205: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1b2a4e; /* High-contrast elegant dark-blue border (not flat slate) */
+  --color-slate-850: #131e3d;
+  --color-slate-900: #0c152a; /* Rich, classic sapphire/deep navy instead of dull gray */
+  --color-slate-950: #060a16; /* Clean deep royal midnight base, avoiding dry charcoal-blacks */
+
+  --color-natural-bg: #060a16;
+  --color-natural-sidebar: #040710;
   --color-natural-green: #38bdf8;
   --color-natural-clay: #0ea5e9;
   --color-natural-clay-hover: #0284c7;
-  --color-natural-beige: #1e293b;
-  --color-natural-light: #121e33;
+  --color-natural-beige: #101a35;
+  --color-natural-light: #0c152a;
   --color-natural-charcoal: #e2e8f0;
 }
 
