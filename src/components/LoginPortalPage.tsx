@@ -860,7 +860,7 @@ export default function LoginPortalPage({ onSuccess }: LoginPortalPageProps) {
             <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-slate-400 font-medium font-mono leading-relaxed select-all">
               <div>
                 <span className="text-[7.5px] block text-sky-450 uppercase leading-none mt-0.5">Admin:</span>
-                <span>admin / admin123</span>
+                <span>{admins[0]?.username || 'admin'} / {admins[0]?.username ? '●●●●●●' : 'admin123'}</span>
               </div>
               <div>
                 <span className="text-[7.5px] block text-sky-450 uppercase leading-none mt-0.5">Teacher:</span>

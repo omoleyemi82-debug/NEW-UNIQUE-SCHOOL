@@ -328,20 +328,7 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         console.error("Failed to parse school_admins", e);
       }
     }
-    return [
-      {
-        id: 'admin',
-        name: 'Super Administrator',
-        username: 'admin',
-        email: 'admin@academy.org',
-        phone: '+2348000000000',
-        password: encryptPassword('admin123'),
-        role: 'super_admin',
-        permissions: ['full_access', 'user_management'],
-        isActiveAccount: true,
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop'
-      }
-    ];
+    return [];
   });
 
   const [rolesConfig, setRolesConfig] = useState<RoleConfig[]>(() => {
