@@ -143,7 +143,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
       </div>
 
       {/* Modern, calm, professional sticky header */}
-      <header className="sticky top-0 z-50 bg-[#090f1f]/95 backdrop-blur-md border-b border-slate-800/80 shadow-lg relative">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E6E9EF] shadow-sm relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           
           {/* Logo Brand */}
@@ -152,28 +152,28 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             className="flex items-center gap-3 active:scale-95 transition-transform bg-transparent border-none text-left cursor-pointer outline-none group"
             id="header-brand-logo"
           >
-            <div className="p-2 bg-slate-900 border border-slate-800 rounded-xl shrink-0 flex items-center justify-center group-hover:border-sky-500/40 transition-colors">
+            <div className="p-2 bg-[#F5F7FA] border border-[#E6E9EF] rounded-xl shrink-0 flex items-center justify-center group-hover:border-[#1E4D8F]/40 transition-colors">
               <img 
                 src="/logo.png" 
                 alt="School Crest Logo" 
-                className="w-10 h-10 object-contain brightness-0 invert"
+                className="w-10 h-10 object-contain"
                 referrerPolicy="no-referrer"
               />
             </div>
             <div>
-              <span className="text-base font-serif font-black tracking-widest text-[#f1f5f9] uppercase block leading-none">NEW UNIQUE ACADEMY</span>
-              <span className="text-[9px] block text-sky-400 font-bold tracking-widest uppercase mt-1 leading-none">Secured Secondary Institution</span>
+              <span className="text-base font-sans font-black tracking-widest text-[#0B1F3B] uppercase block leading-none">NEW UNIQUE ACADEMY</span>
+              <span className="text-[9px] block text-[#1E4D8F] font-black tracking-widest uppercase mt-1 leading-none">Secured Secondary Institution</span>
             </div>
           </button>
 
           {/* Desktop Links (Muted Cool styling) */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-slate-400">
+          <nav className="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-[#AAB4C0]">
             <button 
               onClick={() => setCurrentTab('home')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
                 currentTab === 'home' 
-                  ? 'text-sky-400 border-sky-400' 
-                  : 'border-transparent hover:text-sky-300'
+                  ? 'text-[#1E4D8F] border-[#1E4D8F]' 
+                  : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
               }`}
             >
               Home
@@ -181,7 +181,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             <button 
               onClick={() => setCurrentTab('about')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'about' ? 'text-sky-400 border-sky-400' : 'border-transparent hover:text-sky-300'
+                currentTab === 'about' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
               }`}
             >
               About School
@@ -189,7 +189,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             <button 
               onClick={() => setCurrentTab('academics')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'academics' ? 'text-sky-400 border-sky-400' : 'border-transparent hover:text-sky-300'
+                currentTab === 'academics' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
               }`}
             >
               Academics
@@ -197,7 +197,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             <button 
               onClick={() => setCurrentTab('events')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'events' ? 'text-sky-400 border-sky-400' : 'border-transparent hover:text-sky-300'
+                currentTab === 'events' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
               }`}
             >
               Events
@@ -205,7 +205,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             <button 
               onClick={() => setCurrentTab('contact')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'contact' ? 'text-sky-400 border-sky-400' : 'border-transparent hover:text-sky-300'
+                currentTab === 'contact' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
               }`}
             >
               Contact Us
@@ -217,16 +217,16 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             {currentRole === 'guest' ? (
               <button
                 onClick={onLoginClick}
-                className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-950 bg-sky-500 hover:bg-sky-400 active:scale-95 transition-all rounded-xl shadow-lg shadow-sky-500/10 cursor-pointer flex items-center gap-1.5"
+                className="px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-[#1E4D8F] hover:bg-[#1E4D8F]/90 active:scale-95 transition-all rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
                 id="header-login-btn"
               >
-                <ShieldCheck className="w-4 h-4 text-slate-950" /> Portal Login
+                <ShieldCheck className="w-4 h-4 text-white" /> Portal Login
               </button>
             ) : (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentTab('portal')}
-                  className="px-4 py-2.5 bg-slate-900 border border-slate-800 hover:border-sky-500/30 text-sky-400 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-4 py-2.5 bg-white border border-[#E6E9EF] hover:border-[#1E4D8F]/30 text-[#1E4D8F] text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <Building className="w-3.5 h-3.5" /> Portal Dashboard
                 </button>
@@ -235,7 +235,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                     setRole('guest', 'guest');
                     setCurrentTab('home');
                   }}
-                  className="px-3 py-2.5 text-xs font-bold uppercase tracking-wider text-red-400 bg-red-950/20 hover:bg-red-900/40 rounded-xl cursor-pointer"
+                  className="px-3 py-2.5 text-xs font-bold uppercase tracking-wider text-[#E74C3C] bg-[#E74C3C]/10 hover:bg-[#E74C3C]/20 rounded-xl cursor-pointer"
                 >
                   Logout
                 </button>
@@ -245,7 +245,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             {/* Hamburger helper toggles */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 bg-slate-900 rounded-xl text-sky-400 border border-slate-800"
+              className="md:hidden p-2 bg-[#F5F7FA] rounded-xl text-[#1E4D8F] border border-[#E6E9EF]"
               title="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -308,31 +308,31 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
 
       {/* Hero Block (Calm visual dark blue design) */}
       {currentTab === 'home' && (
-        <section className="relative overflow-hidden py-16 lg:py-24 bg-slate-950 border-b border-slate-900">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(56,189,248,0.06),transparent)]"></div>
+        <section className="relative overflow-hidden py-16 lg:py-24 hero-gradient-box border-b border-[#163056]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(77,163,255,0.08),transparent)]"></div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-slate-800/80 text-sky-400 text-[10px] font-bold uppercase tracking-widest leading-none">
-                <Star className="w-3.5 h-3.5 fill-sky-400 text-sky-400" /> State Approved Secondary School
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0B1F3B]/60 border border-[#1E4D8F]/30 text-[#4DA3FF] text-[10px] font-bold uppercase tracking-widest leading-none">
+                <Star className="w-3.5 h-3.5 fill-[#F1C40F] text-[#F1C40F]" /> State Approved Secondary School
               </div>
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-black tracking-tight leading-[1.1] text-white">
-                Academic Excellence Is <span className="text-sky-400">Our Pride</span>
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-sans font-black tracking-tight leading-[1.1] text-white">
+                Academic Excellence Is <span className="text-[#4DA3FF]">Our Pride</span>
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-lg">
                 NEW UNIQUE ACADEMY offers a realistic secondary learning experience. Governed by core discipline, state-accredited examinations, and clear subject schedules inside Science, Art, and Commerce specialization divisions.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <button
                   onClick={onLoginClick}
-                  className="px-6 py-3.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-[11px] uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-sky-500/10 flex items-center justify-center gap-1.5 cursor-pointer leading-none"
+                  className="px-6 py-3.5 bg-[#F1C40F] hover:bg-[#D4AF37] text-[#0B1F3B] font-extrabold text-[11px] uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer leading-none"
                 >
-                  <ShieldCheck className="w-4 h-4 text-slate-950" /> Access Management Portal
+                  <ShieldCheck className="w-4 h-4 text-[#0B1F3B]" /> Access Management Portal
                 </button>
                 <button
                   onClick={() => setCurrentTab('about')}
-                  className="px-6 py-3.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 font-bold text-[11px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer leading-none"
+                  className="px-6 py-3.5 bg-[#0B1F3B]/80 border border-[#E6E9EF]/30 hover:border-[#4DA3FF] text-white font-bold text-[11px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer leading-none"
                 >
                   Explore About School
                 </button>
@@ -342,11 +342,11 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             {/* Campus Front Representation */}
             <div className="lg:col-span-5 relative hidden lg:block">
               <div className="relative mx-auto w-[360px] h-[360px]">
-                <div className="absolute -top-3 -left-3 w-full h-full rounded-3xl bg-sky-500/10 border border-sky-400/10 transform rotate-2"></div>
+                <div className="absolute -top-3 -left-3 w-full h-full rounded-3xl bg-[#4DA3FF]/10 border border-[#4DA3FF]/10 transform rotate-2"></div>
                 <img
                   src="/front_page.png"
                   alt="NEW UNIQUE ACADEMY Campus Workstations"
-                  className="absolute inset-0 w-full h-full object-cover rounded-3xl shadow-2xl border border-slate-800"
+                  className="absolute inset-0 w-full h-full object-cover rounded-3xl shadow-2xl border border-[#1E4D8F]/35"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400';

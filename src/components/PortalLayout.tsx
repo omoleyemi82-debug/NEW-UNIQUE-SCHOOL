@@ -112,13 +112,13 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
   const currentNav = (currentRole === 'student' || currentRole === 'parent') ? studentNav : currentRole === 'teacher' ? teacherNav : adminNav;
 
   return (
-    <div className="min-h-screen bg-natural-bg flex flex-col md:flex-row text-natural-charcoal font-sans">
+    <div className="min-h-screen bg-natural-bg flex flex-col md:flex-row text-[#0B1F3B] font-sans">
       {/* Sidebar navigation */}
-      <aside className="w-full md:w-64 bg-natural-sidebar text-natural-charcoal flex flex-col shrink-0 border-r border-natural-beige">
+      <aside className="w-full md:w-64 bg-natural-sidebar text-slate-100 flex flex-col shrink-0 border-r border-[#163056]">
         {/* Brand Header */}
-        <div className="p-6 h-20 flex items-center justify-between border-b border-natural-beige shrink-0">
+        <div className="p-6 h-20 flex items-center justify-between border-b border-[#163056] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-0.5 bg-white border border-natural-beige rounded-lg shadow-xs shrink-0 flex items-center justify-center">
+            <div className="p-0.5 bg-white border border-slate-200 rounded-lg shadow-xs shrink-0 flex items-center justify-center">
               <img 
                 src="/logo.png" 
                 alt="New Unique Academy Logo" 
@@ -127,24 +127,24 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
               />
             </div>
             <div>
-              <span className="text-sm font-serif font-black text-natural-charcoal uppercase tracking-wide leading-none">NEW UNIQUE ACADEMY</span>
-              <span className="text-[9px] block text-natural-green font-bold tracking-wider leading-none uppercase mt-0.5">School Hub</span>
+              <span className="text-sm font-sans font-black text-white uppercase tracking-wider leading-none block">NEW UNIQUE</span>
+              <span className="text-[9px] block text-[#4DA3FF] font-black tracking-widest leading-none uppercase mt-1">ACADEMY</span>
             </div>
           </div>
         </div>
 
         {/* Profile Card Summary */}
-        <div className="p-4 bg-natural-light/60 border-b border-natural-beige shrink-0">
+        <div className="p-4 bg-[#0e2546] border-b border-[#163056] shrink-0">
           <div className="flex items-center gap-3">
             <img
               src={currentAvatarUrl}
               alt="Avatar Profile"
-              className="w-10 h-10 rounded-full border border-natural-beige object-cover shrink-0"
+              className="w-10 h-10 rounded-full border border-[#1a365d] object-cover shrink-0"
               referrerPolicy="no-referrer"
             />
             <div className="min-w-0 flex-1">
-              <span className="text-sm font-bold text-natural-charcoal block truncate">{currentProfileName}</span>
-              <span className="text-[10px] text-natural-green font-semibold block uppercase tracking-wider truncate">{currentProfileSub}</span>
+              <span className="text-sm font-bold text-white block truncate">{currentProfileName}</span>
+              <span className="text-[10px] text-[#AAB4C0] font-semibold block uppercase tracking-wider truncate mt-0.5">{currentProfileSub}</span>
             </div>
           </div>
         </div>
@@ -158,11 +158,11 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
               <button
                 key={link.id}
                 onClick={() => setActiveTab(link.id)}
-                className={`w-full text-natural-charcoal/85 hover:bg-natural-beige/60 hover:text-natural-charcoal flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wider cursor-pointer rounded-xl transition-all ${
+                className={`w-full text-[#AAB4C0] hover:bg-[#1E4D8F]/25 hover:text-white flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wider cursor-pointer rounded-xl transition-all ${
                   active ? 'bg-natural-green! text-white shadow-sm' : ''
                 }`}
               >
-                <Icon className={`w-4 h-4 shrink-0 transition-transform duration-300 ${active ? 'scale-110 text-white' : 'text-natural-green'}`} />
+                <Icon className={`w-4 h-4 shrink-0 transition-transform duration-300 ${active ? 'scale-110 text-white' : 'text-[#4DA3FF]'}`} />
                 {link.label}
               </button>
             );
@@ -170,18 +170,18 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
         </nav>
 
         {/* Primary Swapper & Log Out */}
-        <div className="p-4 bg-natural-sidebar border-t border-natural-beige space-y-3 shrink-0">
+        <div className="p-4 bg-natural-sidebar border-t border-[#163056] space-y-3 shrink-0">
           {/* Quick Demo Swapper Widget */}
-          <div className="bg-natural-beige/40 border border-natural-beige rounded-xl p-3 space-y-2">
+          <div className="bg-[#0e2546]/80 border border-[#163056] rounded-xl p-3 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[9px] font-black text-natural-green uppercase tracking-wider">Demo Sandbox Role</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-natural-clay shadow shadow-natural-clay/40 animate-pulse"></div>
+              <span className="text-[9px] font-black text-[#4DA3FF] uppercase tracking-wider">Demo Sandbox Role</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#F1C40F] shadow shadow-[#F1C40F]/45 animate-pulse"></div>
             </div>
 
             <div className="grid grid-cols-1 gap-1">
               {/* Swapper triggers */}
-              <div className="text-[10px] font-bold text-natural-charcoal flex flex-col gap-1 select-none">
-                <span className="text-[8px] text-natural-green/80 pt-1 font-extrabold uppercase">STUDENTS:</span>
+              <div className="text-[10px] font-bold text-slate-300 flex flex-col gap-1 select-none">
+                <span className="text-[8px] text-[#AAB4C0] pt-1 font-extrabold uppercase">STUDENTS:</span>
                 <div className="flex flex-wrap gap-1">
                   {students.slice(0, 2).map((st) => (
                     <button
@@ -190,10 +190,10 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
                         setRole('student', st.id);
                         setActiveTab('dash');
                       }}
-                      className={`px-2 py-1 rounded text-[10px] font-semibold border text-left cursor-pointer transition-all ${
+                      className={`px-2 py-1 rounded text-[10px] font-bold border text-left cursor-pointer transition-all ${
                         currentRole === 'student' && currentUserId === st.id
                           ? 'bg-natural-green border-natural-green text-white font-bold'
-                          : 'bg-natural-light border-natural-beige hover:border-natural-green/40 text-natural-charcoal'
+                          : 'bg-[#0B1F3B] border-[#163056] hover:border-[#4DA3FF]/40 text-slate-300'
                       }`}
                     >
                       {st.name.split(' ')[0]}
@@ -201,24 +201,24 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
                   ))}
                 </div>
 
-                <span className="text-[8px] text-natural-green/80 pt-1 font-extrabold uppercase">PARENTS:</span>
+                <span className="text-[8px] text-[#AAB4C0] pt-1 font-extrabold uppercase">PARENTS:</span>
                 <div className="flex flex-wrap gap-1 mb-1">
                   <button
                     onClick={() => {
                       setRole('parent', 's_01');
                       setActiveTab('dash');
                     }}
-                    className={`px-2 py-1 rounded text-[10px] font-semibold border text-left cursor-pointer transition-all ${
+                    className={`px-2 py-1 rounded text-[10px] font-bold border text-left cursor-pointer transition-all ${
                       currentRole === 'parent'
                         ? 'bg-natural-green border-natural-green text-white font-bold'
-                        : 'bg-natural-light border-natural-beige hover:border-natural-green/40 text-[#252525]'
+                        : 'bg-[#0B1F3B] border-[#163056] hover:border-[#4DA3FF]/40 text-slate-300'
                     }`}
                   >
-                    Robert (Julian's Guardian)
+                    Robert (Julian)
                   </button>
                 </div>
 
-                <span className="text-[8px] text-natural-green/80 pt-1 font-extrabold uppercase">INSTRUCTORS:</span>
+                <span className="text-[8px] text-[#AAB4C0] pt-1 font-extrabold uppercase">INSTRUCTORS:</span>
                 <div className="flex flex-wrap gap-1">
                   {teachers.slice(0, 2).map((tc) => (
                     <button
@@ -227,10 +227,10 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
                         setRole('teacher', tc.id);
                         setActiveTab('dash');
                       }}
-                      className={`px-2 py-1 rounded text-[10px] font-semibold border text-left cursor-pointer transition-all ${
+                      className={`px-2 py-1 rounded text-[10px] font-bold border text-left cursor-pointer transition-all ${
                         currentRole === 'teacher' && currentUserId === tc.id
                           ? 'bg-natural-green border-natural-green text-white font-bold'
-                          : 'bg-natural-light border-natural-beige hover:border-natural-green/40 text-natural-charcoal'
+                          : 'bg-[#0B1F3B] border-[#163056] hover:border-[#4DA3FF]/40 text-slate-300'
                       }`}
                     >
                       {tc.name.split(' ')[1] || tc.name}
@@ -238,16 +238,16 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
                   ))}
                 </div>
 
-                <span className="text-[8px] text-natural-green/80 pt-1 font-extrabold uppercase">ADMINISTRATOR:</span>
+                <span className="text-[8px] text-[#AAB4C0] pt-1 font-extrabold uppercase">ADMINISTRATOR:</span>
                 <button
                   onClick={() => {
                     setRole('admin', 'admin');
                     setActiveTab('dash');
                   }}
-                  className={`px-2 py-1 rounded text-[10px] font-semibold border text-center cursor-pointer transition-all ${
+                  className={`px-2 py-1 rounded text-[10px] font-bold border text-center cursor-pointer transition-all ${
                     currentRole === 'admin'
-                      ? 'bg-natural-clay border-natural-clay text-white font-bold'
-                      : 'bg-natural-light border-natural-beige hover:border-natural-green/40 text-natural-charcoal'
+                      ? 'bg-[#F1C40F] border-[#F1C40F] text-[#0B1F3B] font-extrabold'
+                      : 'bg-[#0B1F3B] border-[#163056] hover:border-[#4DA3FF]/40 text-slate-300'
                   }`}
                 >
                   Universal Admin
@@ -259,9 +259,9 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
           <button
             onClick={onLogout}
             id="side-logout-button"
-            className="w-full text-left text-xs font-bold uppercase tracking-wider text-natural-charcoal hover:bg-natural-beige/40 hover:text-natural-charcoal flex items-center gap-3 px-3.5 py-2.5 rounded-xl cursor-pointer"
+            className="w-full text-left text-xs font-bold uppercase tracking-wider text-[#AAB4C0] hover:bg-[#1E4D8F]/25 hover:text-white flex items-center gap-3 px-3.5 py-2.5 rounded-xl cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-natural-clay" />
+            <LogOut className="w-4 h-4 text-[#F1C40F]" />
             Logout to Web
           </button>
         </div>

@@ -6,28 +6,30 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Premium override of standard slate classes to achieve a "Classic Fancy" Academic Royal Navy aesthetic */
-  --color-slate-50: #ffffff;
-  --color-slate-100: #faf9f5;
-  --color-slate-205: #f0ebe0;
-  --color-slate-300: #1a2638;
-  --color-slate-400: #2d3b4e;
-  --color-slate-500: #425268;
-  --color-slate-600: #5d6b7e;
-  --color-slate-700: #b8b1a2;
-  --color-slate-800: #e6dfcd; /* High-contrast elegant border */
-  --color-slate-850: #faf9f5;
-  --color-slate-900: #ffffff; 
-  --color-slate-950: #f7f5ee; 
+  /* Custom Academic Theme Palette for New Unique Academy */
+  --color-natural-bg: #F5F7FA;          /* Soft White main area background */
+  --color-natural-sidebar: #0B1F3B;     /* Deep Navy Blue dashboard sidebar */
+  --color-natural-green: #1E4D8F;       /* Royal Blue buttons, highlights & menus */
+  --color-natural-green-hover: #4DA3FF; /* Sky Blue links, icons, and hover states */
+  --color-natural-clay: #F1C40F;        /* Golden Accent for badges, grades, emphasis */
+  --color-natural-clay-hover: #D4AF37;
+  --color-natural-beige: #E6E9EF;       /* Light Grey borders */
+  --color-natural-light: #FFFFFF;       /* Pure white for container cards */
+  --color-natural-charcoal: #0B1F3B;    /* Deep Navy Blue for text readability */
 
-  --color-natural-bg: #f7f5ee;
-  --color-natural-sidebar: #ffffff;
-  --color-natural-green: #1a365d;
-  --color-natural-clay: #c5a059;
-  --color-natural-clay-hover: #b28e46;
-  --color-natural-beige: #e4dfd5;
-  --color-natural-light: #faf9f5;
-  --color-natural-charcoal: #1c2b42;
+  /* Standard color system utility overrides for full-workspace alignment */
+  --color-slate-50: #FFFFFF;
+  --color-slate-100: #F5F7FA;
+  --color-slate-205: #E6E9EF;
+  --color-slate-300: #0B1F3B;
+  --color-slate-400: #1E4D8F;
+  --color-slate-500: #AAB4C0;
+  --color-slate-600: #5D6B7E;
+  --color-slate-700: #AAB4C0;
+  --color-slate-800: #E6E9EF; /* Light Grey Borders */
+  --color-slate-850: #F5F7FA;
+  --color-slate-900: #FFFFFF; 
+  --color-slate-950: #F5F7FA; 
 }
 
 body {
@@ -36,10 +38,39 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Custom overrides for Landing Page backdrops in Classic Light Academic theme */
+/* Custom overrides for Landing Page in Classic Light Academic theme */
 .landing-page-wrapper {
-  background-color: #f7f5ee !important;
-  color: #1c2b42 !important;
+  background-color: #F5F7FA !important;
+  color: #0B1F3B !important;
+}
+
+/* Alternate sections mapping to satisfy 'sections separated with light grey backgrounds' */
+.landing-page-wrapper section {
+  background-color: #FFFFFF !important;
+  border-color: #E6E9EF !important;
+  color: #0B1F3B !important;
+}
+
+.landing-page-wrapper section:nth-of-type(even) {
+  background-color: #F5F7FA !important;
+}
+
+/* Let the hero section be a beautiful Navy gradient as requested */
+.landing-page-wrapper .hero-gradient-box,
+.landing-page-wrapper section.hero-gradient-box {
+  background: linear-gradient(135deg, #0B1F3B 0%, #15325c 100%) !important;
+  border-color: #163056 !important;
+}
+
+/* Hero section should retain its readable white texts */
+.landing-page-wrapper section.hero-gradient-box h1,
+.landing-page-wrapper section.hero-gradient-box p,
+.landing-page-wrapper section.hero-gradient-box span:not(.text-\[\#4DA3FF\]) {
+  color: #FFFFFF !important;
+}
+
+.landing-page-wrapper section.hero-gradient-box .text-\[\#4DA3FF\] {
+  color: #4DA3FF !important;
 }
 
 .landing-page-wrapper .text-white,
@@ -48,68 +79,92 @@ body {
 .landing-page-wrapper h3,
 .landing-page-wrapper h4,
 .landing-page-wrapper h5 {
-  color: #111b2d !important;
+  color: #0B1F3B !important;
 }
 
 .landing-page-wrapper p,
 .landing-page-wrapper span:not(.font-mono),
+.landing-page-wrapper .text-[#AAB4C0],
 .landing-page-wrapper .text-slate-350,
 .landing-page-wrapper .text-slate-300,
-.landing-page-wrapper .text-slate-400,
-.landing-page-wrapper .text-slate-200 {
-  color: #3a4b61 !important;
+.landing-page-wrapper .text-[#E6E9EF] {
+  color: #425268 !important;
 }
 
 .landing-page-wrapper .bg-slate-900 {
-  background-color: #ffffff !important;
-  border-color: #e4dfd5 !important;
+  background-color: #FFFFFF !important;
+  border-color: #E6E9EF !important;
 }
 
 .landing-page-wrapper .border-slate-800,
 .landing-page-wrapper .border-slate-900 {
-  border-color: #e4dfd5 !important;
+  border-color: #E6E9EF !important;
 }
 
 .landing-page-wrapper .bg-slate-950 {
-  background-color: #faf9f5 !important;
-  border-color: #e4dfd5 !important;
+  background-color: #FFFFFF !important;
+  border-color: #E6E9EF !important;
 }
 
-/* Login Portal Layout overrides for Formal & Gentle light styling */
+.landing-page-wrapper input,
+.landing-page-wrapper textarea,
+.landing-page-wrapper select {
+  background-color: #FFFFFF !important;
+  border-color: #E6E9EF !important;
+  color: #0B1F3B !important;
+}
+
+.landing-page-wrapper button.bg-sky-500 {
+  background-color: #1E4D8F !important;
+  color: #FFFFFF !important;
+}
+
+.landing-page-wrapper button.bg-sky-500 hover\:bg-sky-400:hover {
+  background-color: #4DA3FF !important;
+}
+
+.landing-page-wrapper .text-sky-450,
+.landing-page-wrapper .text-sky-400 {
+  color: #1E4D8F !important; /* Royal Blue */
+}
+
+/* Login Portal Layout overrides for calm Navy theme and centered card */
 .login-portal-wrapper {
-  background-color: #f7f5ee !important;
-  color: #1c2b42 !important;
+  background: linear-gradient(135deg, #0B1F3B 0%, #173763 100%) !important;
+  color: #0B1F3B !important;
 }
 
 .login-portal-wrapper .bg-slate-900\/60 {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border-color: #e4dfd5 !important;
-  box-shadow: 0 10px 40px rgba(27, 43, 66, 0.05) !important;
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: #E6E9EF !important;
+  box-shadow: 0 15px 50px rgba(11, 31, 59, 0.15) !important;
+  border-radius: 1.5rem !important;
 }
 
 .login-portal-wrapper h2,
 .login-portal-wrapper h3 {
-  color: #111b2d !important;
+  color: #0B1F3B !important;
 }
 
 .login-portal-wrapper p,
 .login-portal-wrapper label,
+.login-portal-wrapper .text-slate-405,
 .login-portal-wrapper .text-slate-400 {
   color: #425268 !important;
 }
 
 .login-portal-wrapper input {
-  background-color: #faf9f5 !important;
-  border-color: #d8d3c5 !important;
-  color: #111b2d !important;
+  background-color: #F5F7FA !important;
+  border-color: #E6E9EF !important;
+  color: #0B1F3B !important;
 }
 
 .login-portal-wrapper input::placeholder {
-  color: #a49e90 !important;
+  color: #AAB4C0 !important;
 }
 
 .login-portal-wrapper select {
-  background-color: #faf9f5 !important;
-  border-color: #d8d3c5 !important;
-  color: #111b2d !important;
+  background-color: #F5F7FA !important;
+  border-color: #E6E9EF !important;
+  color: #0B1F3B !important;
 }
