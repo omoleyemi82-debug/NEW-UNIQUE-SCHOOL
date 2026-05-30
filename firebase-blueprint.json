@@ -1,0 +1,185 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "System accounts for Admins, Teachers, Students, and Parents",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "role": { "type": "string" },
+        "permissions": { "type": "array" },
+        "isActiveAccount": { "type": "boolean" },
+        "avatar": { "type": "string" }
+      },
+      "required": ["id", "username", "email", "password", "role"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student academic profiles and biodata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "gradeLevel": { "type": "string" },
+        "guardianName": { "type": "string" },
+        "guardianPhone": { "type": "string" },
+        "joinedDate": { "type": "string" },
+        "admissionNumber": { "type": "string" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "isActiveAccount": { "type": "boolean" },
+        "gender": { "type": "string" },
+        "dateOfBirth": { "type": "string" },
+        "nationality": { "type": "string" },
+        "state": { "type": "string" },
+        "lga": { "type": "string" },
+        "religion": { "type": "string" },
+        "bloodGroup": { "type": "string" },
+        "medicalNotes": { "type": "string" },
+        "homeAddress": { "type": "string" },
+        "guardianEmail": { "type": "string" },
+        "studentPhone": { "type": "string" },
+        "department": { "type": "string" },
+        "tuitionTotal": { "type": "number" },
+        "tuitionPaid": { "type": "number" }
+      },
+      "required": ["id", "name", "email", "gradeLevel"]
+    },
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Teacher profile and assignments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "department": { "type": "string" },
+        "bio": { "type": "string" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "isActiveAccount": { "type": "boolean" },
+        "subjects": { "type": "array" },
+        "classrooms": { "type": "array" }
+      },
+      "required": ["id", "name", "email", "department"]
+    },
+    "Parent": {
+      "title": "Parent",
+      "description": "Parent accounts and linked student IDs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "password": { "type": "string" },
+        "studentIds": { "type": "array" },
+        "isActiveAccount": { "type": "boolean" }
+      },
+      "required": ["id", "name", "email", "phone", "studentIds"]
+    },
+    "Result": {
+      "title": "Result",
+      "description": "Academic records, assessments, reports, and grades",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "title": { "type": "string" },
+        "score": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "date": { "type": "string" },
+        "category": { "type": "string" },
+        "term": { "type": "string" }
+      },
+      "required": ["id", "studentId", "courseId", "score"]
+    },
+    "CbtExam": {
+      "title": "CbtExam",
+      "description": "CBT Quizzes, questions, and timed sets",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "timeLimitMinutes": { "type": "number" },
+        "dueDate": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "questions": { "type": "array" }
+      },
+      "required": ["id", "courseId", "title", "questions"]
+    },
+    "SchoolFee": {
+      "title": "SchoolFee",
+      "description": "Payment categories, tuition structures, and paid records",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "amount": { "type": "number" },
+        "description": { "type": "string" },
+        "appliesToClass": { "type": "string" },
+        "deadline": { "type": "string" },
+        "isCompulsory": { "type": "boolean" }
+      },
+      "required": ["id", "name", "amount"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Global school notifications and messages",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string" },
+        "type": { "type": "string" },
+        "isRead": { "type": "boolean" }
+      },
+      "required": ["id", "title", "message", "date"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Stores user system logins and administrative claims"
+    },
+    "students": {
+      "schema": "Student",
+      "description": "Stores detailed student biodata and school admissions profiles"
+    },
+    "teachers": {
+      "schema": "Teacher",
+      "description": "Stores teacher credentials, bio, qualifications, and classroom logs"
+    },
+    "parents": {
+      "schema": "Parent",
+      "description": "Stores representative details and student mapping linkages"
+    },
+    "results": {
+      "schema": "Result",
+      "description": "Stores individual test scores, marks, terms assessments, and reports"
+    },
+    "cbtExams": {
+      "schema": "CbtExam",
+      "description": "Stores computer-based test forms, Excel-imported sets, and configurations"
+    },
+    "schoolFees": {
+      "schema": "SchoolFee",
+      "description": "Stores active school payment structures, charges, and category parameters"
+    },
+    "announcements": {
+      "schema": "Announcement",
+      "description": "Stores calendar events, school bulletins, and notifications"
+    }
+  }
+}

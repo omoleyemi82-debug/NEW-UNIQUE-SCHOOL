@@ -5,7 +5,20 @@ import LoginPortalPage from './components/LoginPortalPage';
 import SetupPortal from './components/SetupPortal';
 
 function AppContent() {
-  const { currentRole, setRole, admins } = useSchool();
+  const { currentRole, setRole, admins, loading } = useSchool();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="space-y-4 text-center">
+          <div className="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-slate-400 font-mono text-sm animate-pulse">
+            Connecting to NEW UNIQUE ACADEMY Secure Records...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Auto-logout after 5 minutes of inactivity for logged-in users
   useEffect(() => {
@@ -37,11 +50,6 @@ function AppContent() {
       });
     };
   }, [currentRole, setRole]);
-
-  // If no administrators are registered, enforce First System Setup immediately!
-  if (admins.length === 0) {
-    return <SetupPortal />;
-  }
 
   // Display only the login portal if user is guest/unauthenticated
   if (currentRole === 'guest') {

@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+    match /students/{studentId} {
+      allow read, write: if true;
+    }
+    match /teachers/{teacherId} {
+      allow read, write: if true;
+    }
+    match /parents/{parentId} {
+      allow read, write: if true;
+    }
+    match /courses/{courseId} {
+      allow read, write: if true;
+    }
+    match /subjects/{subjectId} {
+      allow read, write: if true;
+    }
+    match /teacherAssignments/{id} {
+      allow read, write: if true;
+    }
+    match /results/{id} {
+      allow read, write: if true;
+    }
+    match /cbtExams/{id} {
+      allow read, write: if true;
+    }
+    match /submissions/{id} {
+      allow read, write: if true;
+    }
+    match /events/{id} {
+      allow read, write: if true;
+    }
+    match /paymentCategories/{id} {
+      allow read, write: if true;
+    }
+    match /paymentRecords/{id} {
+      allow read, write: if true;
+    }
+    match /paymentMethods/{id} {
+      allow read, write: if true;
+    }
+    match /notifications/{id} {
+      allow read, write: if true;
+    }
+    match /messages/{id} {
+      allow read, write: if true;
+    }
+    match /loginSessions/{id} {
+      allow read, write: if true;
+    }
+    match /schoolConfig/{id} {
+      allow read, write: if true;
+    }
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
