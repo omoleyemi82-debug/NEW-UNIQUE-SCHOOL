@@ -9,7 +9,9 @@ import {
   KeyRound, 
   User, 
   Check,
-  ArrowRight
+  ArrowRight,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 interface LoginModalProps {
@@ -31,6 +33,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
   
   const [identifier, setIdentifier] = useState(''); 
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isForgotMode, setIsForgotMode] = useState(false);
   
@@ -364,10 +367,10 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                     Forgot Password?
                   </button>
                 </div>
-                <div className="relative">
-                  <KeyRound className="absolute left-3.5 top-3 w-4 h-4 text-[#1A365D]/60" />
+                <div className="relative flex items-center">
+                  <KeyRound className="absolute left-3.5 top-3 w-4 h-4 text-[#1A365D]/60 pointer-events-none" />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={(e) => {
@@ -375,8 +378,16 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
                       setError('');
                     }}
                     placeholder="••••••••"
-                    className="w-full text-xs pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#1A365D] focus:bg-white transition-all text-slate-800 font-medium font-mono"
+                    className="w-full text-xs pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#1A365D] focus:bg-white transition-all text-slate-800 font-medium font-mono"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                    title={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 

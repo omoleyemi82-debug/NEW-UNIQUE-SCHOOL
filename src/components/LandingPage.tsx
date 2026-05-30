@@ -616,7 +616,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                   <MapPin className="w-5 h-5 text-sky-400" />
                   <div>
                     <span className="text-[8.5px] text-slate-500 block uppercase tracking-wide">Campus Address</span>
-                    <span className="text-xs font-bold text-slate-200">Behind Fabian Hotel Zone C</span>
+                    <span className="text-xs font-bold text-slate-200">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -735,7 +735,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
           </div>
           <div className="space-y-1.5">
             <span className="text-slate-100 font-extrabold block uppercase tracking-widest text-[9.5px]">Campus General Registrar</span>
-            <p className="text-slate-350">Behind Fabian Hotel Zone C</p>
+            <p className="text-slate-350">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</p>
             <p className="text-sky-400 font-bold">omoleyemi82@gmail.com</p>
           </div>
           <div className="space-y-3.5 md:text-right">
@@ -808,7 +808,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                   </div>
                   <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl">
                     <span className="font-extrabold text-white block mb-1 uppercase tracking-wide text-[10px]">Q: Where is the campus located?</span>
-                    <p className="text-[10.5px] text-slate-400">Our physical secondary school campus is situated Behind Fabian Hotel Zone C. High-grade science laboratory stations and libraries are configured locally.</p>
+                    <p className="text-[10.5px] text-slate-400">Our physical secondary school campus is situated Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria. High-grade science laboratory stations, Christian fellowship centers, and academic libraries are configured locally.</p>
                   </div>
                   <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl">
                     <span className="font-extrabold text-white block mb-1 uppercase tracking-wide text-[10px]">Q: What streams are available?</span>

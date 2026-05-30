@@ -23,6 +23,7 @@ import {
   GraduationCap,
   Sparkles,
   Eye,
+  EyeOff,
   Printer,
   X,
   DollarSign,
@@ -141,6 +142,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
   const [credManualUsername, setCredManualUsername] = useState('');
   const [credPasswordType, setCredPasswordType] = useState<'auto' | 'manual'>('auto');
   const [credManualPassword, setCredManualPassword] = useState('');
+  const [showCredPassword, setShowCredPassword] = useState(false);
   const [credForcePasswordChange, setCredForcePasswordChange] = useState(false);
 
   // Administrative payments state
@@ -1924,13 +1926,23 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                       <span className="text-[8px] uppercase tracking-wider bg-amber-100 text-amber-800 px-1 rounded-sm">TEMPORARY</span>
                     </div>
                   ) : (
-                    <input
-                      type="password"
-                      placeholder="Enter security passcode key"
-                      value={credManualPassword}
-                      onChange={(e) => setCredManualPassword(e.target.value)}
-                      className="w-full text-xs px-3 py-2 bg-white border border-slate-200 rounded-lg outline-none"
-                    />
+                    <div className="relative">
+                      <input
+                        type={showCredPassword ? 'text' : 'password'}
+                        placeholder="Enter security passcode key"
+                        value={credManualPassword}
+                        onChange={(e) => setCredManualPassword(e.target.value)}
+                        className="w-full text-xs pl-3 pr-10 py-2 bg-white border border-slate-200 rounded-lg outline-none font-mono font-bold text-slate-800"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCredPassword(!showCredPassword)}
+                        className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                        title={showCredPassword ? "Hide passcode" : "Show passcode"}
+                      >
+                        {showCredPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
                   )}
                 </div>
 

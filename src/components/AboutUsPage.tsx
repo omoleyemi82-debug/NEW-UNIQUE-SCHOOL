@@ -3,10 +3,10 @@ import { Award, ShieldCheck, HeartPulse, Star, Compass, Target, BookOpen } from 
 
 export default function AboutUsPage() {
   const milestones = [
-    { year: '2016', title: 'School Foundation', desc: 'NEW UNIQUE ACADEMY was established with a focus on core secondary school subjects and quality instruction.' },
-    { year: '2019', title: 'Official Accreditation', desc: 'Received state ministry approvals and registered for West African Senior School Certificate Examination subjects.' },
-    { year: '2022', title: 'Main Campus Transition', desc: 'Moved teaching activities to our purpose-built campus Behind Fabian Hotel Zone C, improving scientific laboratory access.' },
-    { year: '2025', title: 'Administrative Portal Launch', desc: 'Introduced the secure student-teacher-parent portal software to coordinate timetables, attendance registers, and academic result sheets.' }
+    { year: '2015', title: 'School Foundation', desc: 'NEW UNIQUE ACADEMY was established as a premier Christian secondary school dedicated to high moral values, academic integrity, and sound preparation for higher education.' },
+    { year: '2019', title: 'Official Accreditation', desc: 'Received state ministry approvals for both Junior and Senior School Certifications across Science, Art, and Commerce streams.' },
+    { year: '2022', title: 'Main Campus Transition', desc: 'Moved teaching activities to our purpose-built permanent campus Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria, upgrading science laboratories and computing stations.' },
+    { year: '2025', title: 'Administrative Portal Launch', desc: 'Introduced the secure digital portal software to synchronize lesson plans, results processing, attendance registers, and parent-teacher handshakes.' }
   ];
 
   return (
@@ -24,28 +24,28 @@ export default function AboutUsPage() {
         </div>
       </section>
 
-      {/* Main Narrative - 10 years story */}
+      {/* Main Narrative - 11 years story */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
         <div className="lg:col-span-7 space-y-6">
-          <span className="text-xs font-bold text-sky-450 uppercase tracking-widest">Office of the School Principal</span>
+          <span className="text-xs font-bold text-sky-450 uppercase tracking-widest">Office of the Proprietors</span>
           <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white leading-tight">
-            "Promoting simple academic integrity and core knowledge standards"
+            "Academic Excellence Is Our Pride" &mdash; Rooted in Scripture and Moral Integrity
           </h3>
           <div className="h-1 w-12 bg-sky-500 rounded-full"></div>
           
           <div className="space-y-4 text-xs sm:text-sm text-slate-350 leading-relaxed">
             <p>
-              Welcome to NEW UNIQUE ACADEMY. Established in 2016, our institution has maintained a steady focus on providing clear, balanced, and premium secondary training to preparing students for future success. Our formats emphasize homework responsibility, class attendance, and everyday mutual respect.
+              Welcome to NEW UNIQUE ACADEMY. Established in 2015, our Christian secondary institution has spent approximately 11 years nurturing intellectual ability, strict personal discipline, high moral values, and thorough preparation for collegiate and higher academic callings.
             </p>
             <p>
-              Through certified local teacher rosters, modern laboratory sessions, and direct parent-teacher communications, we guide candidates to excel in their regional school exit evaluations.
+              Under the supportive leadership and vision of the Proprietor & Proprietress, Mr. & Mrs. Adelanke, the academy continues to produce exemplary citizens. We guide candidates to excel in WAEC, NECO, and other certifications through specialized streams in Science, Art, and Commerce.
             </p>
           </div>
 
           <div className="flex items-center gap-3 pt-2">
             <div className="shrink-0">
-              <span className="font-serif font-bold text-sm text-slate-200 block">Mrs. Olivia Benson</span>
-              <span className="text-[10px] uppercase text-sky-450 font-bold tracking-widest font-mono">Principal, New Unique Academy</span>
+              <span className="font-serif font-bold text-sm text-slate-200 block">Mr. & Mrs. Adelanke</span>
+              <span className="text-[10px] uppercase text-sky-450 font-bold tracking-widest font-mono">School Proprietor & Proprietress</span>
             </div>
           </div>
         </div>

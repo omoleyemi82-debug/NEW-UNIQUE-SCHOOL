@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useSchool } from '../context/SchoolContext';
 import { encryptPassword } from '../utils/security';
-import { ShieldAlert, Sparkles, User, Mail, Phone, Lock, Upload, Image as ImageIcon, CheckCircle, ArrowRight, Building } from 'lucide-react';
+import { ShieldAlert, Sparkles, User, Mail, Phone, Lock, Upload, Image as ImageIcon, CheckCircle, ArrowRight, Building, Eye, EyeOff } from 'lucide-react';
 
 export default function SetupPortal() {
   const { admins, addAdmin, updateSchoolName, setRole, trackLoginActivity } = useSchool();
@@ -13,6 +13,8 @@ export default function SetupPortal() {
   const [username, setUsername] = useState('superadmin');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [avatarBase64, setAvatarBase64] = useState<string>('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -240,28 +242,48 @@ export default function SetupPortal() {
                   <label className="text-[10px] uppercase font-bold text-natural-green tracking-wider flex items-center gap-1.5">
                     <Lock className="w-3.5 h-3.5" /> Password *
                   </label>
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full text-xs px-4 py-3 bg-natural-light/50 border border-natural-beige rounded-xl outline-none focus:border-natural-green focus:bg-white transition-all text-natural-charcoal font-medium font-mono"
-                  />
+                  <div className="relative flex items-center">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full text-xs pl-4 pr-11 py-3 bg-natural-light/50 border border-natural-beige rounded-xl outline-none focus:border-natural-green focus:bg-white transition-all text-natural-charcoal font-medium font-mono"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                      title={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-natural-green tracking-wider flex items-center gap-1.5">
                     <Lock className="w-3.5 h-3.5" /> Confirm Password *
                   </label>
-                  <input
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full text-xs px-4 py-3 bg-natural-light/50 border border-natural-beige rounded-xl outline-none focus:border-natural-green focus:bg-white transition-all text-natural-charcoal font-medium font-mono"
-                  />
+                  <div className="relative flex items-center">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full text-xs pl-4 pr-11 py-3 bg-natural-light/50 border border-natural-beige rounded-xl outline-none focus:border-natural-green focus:bg-white transition-all text-natural-charcoal font-medium font-mono"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3.5 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                      title={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Profile Photo Uploader */}

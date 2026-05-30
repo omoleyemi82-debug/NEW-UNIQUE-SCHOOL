@@ -65,7 +65,7 @@ export default function ContactUsPage() {
           </div>
           <div className="space-y-1.5 flex-1 min-w-0">
             <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest block font-mono">Physical Coordinates</span>
-            <span className="font-serif font-bold text-sm text-white block">Behind Fabian Hotel Zone C</span>
+            <span className="font-serif font-bold text-sm text-white block">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
             <span className="text-[10.5px] text-slate-400 block leading-relaxed">Visits permitted specifically during school working hours by appointment.</span>
           </div>
         </div>

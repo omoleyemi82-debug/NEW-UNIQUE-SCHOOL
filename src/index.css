@@ -29,7 +29,55 @@
   --color-slate-800: #E6E9EF; /* Light Grey Borders */
   --color-slate-850: #F5F7FA;
   --color-slate-900: #FFFFFF; 
-  --color-slate-950: #F5F7FA; 
+  --color-slate-950: #F5F7FA;
+
+  /* Theme Mapping for Interactive Components using standard Colors */
+  --color-indigo-50: #F5F7FA;
+  --color-indigo-100: #E6E9EF;
+  --color-indigo-200: #E6E9EF;
+  --color-indigo-250: #AAB4C0;
+  --color-indigo-300: #4DA3FF;
+  --color-indigo-400: #4DA3FF;
+  --color-indigo-500: #1E4D8F;
+  --color-indigo-600: #1E4D8F;
+  --color-indigo-650: #1E4D8F;
+  --color-indigo-700: #0B1F3B;
+  --color-indigo-750: #0B1F3B;
+  --color-indigo-800: #0B1F3B;
+  --color-indigo-900: #0B1F3B;
+
+  /* Soft Green overrides for Success/Pass Marks (#2ECC71) */
+  --color-emerald-50: #EBFBEE;
+  --color-emerald-100: #D4EDDA;
+  --color-emerald-500: #2ECC71;
+  --color-emerald-600: #2ECC71;
+  --color-emerald-700: #27AE60;
+  --color-emerald-800: #1E8449;
+
+  --color-green-50: #EBFBEE;
+  --color-green-100: #D4EDDA;
+  --color-green-500: #2ECC71;
+  --color-green-600: #2ECC71;
+  --color-green-700: #27AE60;
+
+  /* Soft Red overrides for Errors/Failures (#E74C3C) */
+  --color-rose-50: #FDEDEC;
+  --color-rose-100: #FADBD8;
+  --color-rose-500: #E74C3C;
+  --color-rose-600: #E74C3C;
+
+  --color-red-50: #FDEDEC;
+  --color-red-100: #FADBD8;
+  --color-red-500: #E74C3C;
+  --color-red-650: #E74C3C;
+  --color-red-700: #C0392B;
+
+  /* Golden Accent overrides for Grades/Emphasis (#F1C40F) */
+  --color-yellow-500: #F1C40F;
+  --color-yellow-600: #D4AF37;
+
+  --color-amber-500: #F1C40F;
+  --color-amber-600: #D4AF37;
 }
 
 body {
@@ -132,6 +180,10 @@ body {
 .login-portal-wrapper {
   background: linear-gradient(135deg, #0B1F3B 0%, #173763 100%) !important;
   color: #0B1F3B !important;
+}
+
+.login-portal-wrapper img {
+  filter: none !important;
 }
 
 .login-portal-wrapper .bg-slate-900\/60 {
