@@ -2149,16 +2149,32 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                 </div>
 
                 <div className="divide-y divide-slate-100 max-h-[420px] overflow-y-auto pr-2">
-                  {teachers
-                    .filter((tc) => {
-                      const matchesSearch = tc.name.toLowerCase().includes(searchTeacherQuery.toLowerCase()) || 
-                                           tc.email.toLowerCase().includes(searchTeacherQuery.toLowerCase());
+                  {(() => {
+                    const filteredTeachersList = teachers.filter((tc) => {
+                      const query = searchTeacherQuery.toLowerCase().trim();
+                      const matchesSearch = !query || 
+                                           tc.name.toLowerCase().includes(query) || 
+                                           tc.email.toLowerCase().includes(query) ||
+                                           (tc.id || '').toLowerCase().includes(query) ||
+                                           (tc.username || '').toLowerCase().includes(query) ||
+                                           (tc.department || '').toLowerCase().includes(query) ||
+                                           (tc.subjects && tc.subjects.some(sub => sub.toLowerCase().includes(query)));
+                      
                       const matchesDept = filterTeacherDept === 'All Departments' || tc.department === filterTeacherDept;
                       const matchesSubject = filterTeacherSubject === 'All Subjects' || 
                                             (tc.subjects && tc.subjects.includes(filterTeacherSubject));
                       return matchesSearch && matchesDept && matchesSubject;
-                    })
-                    .map((tc) => {
+                    });
+
+                    if (filteredTeachersList.length === 0) {
+                      return (
+                        <div className="py-8 text-center text-xs text-slate-500 italic font-medium font-sans">
+                          No Results Found matching "{searchTeacherQuery}"
+                        </div>
+                      );
+                    }
+
+                    return filteredTeachersList.map((tc) => {
                       const isAcctActive = tc.isActiveAccount !== false; // defaults to true
                       return (
                         <div key={tc.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between">
@@ -2248,7 +2264,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                           </div>
                         </div>
                       );
-                    })}
+                    })})()}
                 </div>
               </div>
               )}
@@ -2271,17 +2287,29 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                   </div>
 
                   <div className="divide-y divide-slate-100 max-h-[420px] overflow-y-auto pr-2 font-sans">
-                    {parents && parents
-                      .filter((p) => {
-                        const q = searchParentQuery.toLowerCase();
+                    {(() => {
+                      const filteredParentsList = (parents || []).filter((p) => {
+                        const q = searchParentQuery.toLowerCase().trim();
                         return (
                           p.name.toLowerCase().includes(q) ||
                           p.email.toLowerCase().includes(q) ||
                           (p.phone && p.phone.includes(q)) ||
                           (p.address && p.address.toLowerCase().includes(q))
                         );
-                      })
-                      .map((p) => {
+                      });
+
+                      if (filteredParentsList.length === 0) {
+                        return (
+                          <div className="py-8 text-center text-xs text-slate-500 italic font-medium font-sans">
+                            {parents && parents.length > 0 
+                              ? `No Results Found matching "${searchParentQuery}"`
+                              : "No parent profiles recorded in the database ledger."
+                            }
+                          </div>
+                        );
+                      }
+
+                      return filteredParentsList.map((p) => {
                         const isParentActive = p.isActiveAccount !== false;
                         const linkedChildren = students.filter(s => p.studentIds?.includes(s.id)) || [];
                         return (
@@ -2374,10 +2402,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
                             </div>
                           </div>
                         );
-                      })}
-                    {(!parents || parents.length === 0) && (
-                      <p className="text-xs text-slate-400 italic text-center py-6">No parent profiles recorded in the database ledger.</p>
-                    )}
+                      })})()}
                   </div>
                 </div>
               )}
@@ -2433,7 +2458,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
             return (
               <div className="lg:col-span-12 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mt-6 animate-fade-in font-sans">
                 {/* Header */}
-                <div className="bg-slate-900 text-white p-6 flex justify-between items-center">
+                <div className="bg-[#0B1F3B] text-white p-6 flex justify-between items-center">
                   <div className="space-y-1">
                     <span className="text-[10px] text-teal-400 font-extrabold uppercase tracking-widest block">ADMINISTRATIVE CORE ARCHIVE</span>
                     <h3 className="text-xl font-serif font-bold text-slate-100">{stProfile.name}'s Deep Profile & Credentials</h3>
@@ -2772,7 +2797,7 @@ export default function AdminPortal({ activeTab }: { activeTab: string }) {
             return (
               <div className="lg:col-span-12 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mt-6 animate-fade-in font-sans">
                 {/* Header */}
-                <div className="bg-slate-900 text-white p-6 flex justify-between items-center">
+                <div className="bg-[#0B1F3B] text-white p-6 flex justify-between items-center">
                   <div className="space-y-1">
                     <span className="text-[10px] text-indigo-400 font-extrabold uppercase tracking-widest block">ADMINISTRATIVE COGNITIVE LEGER</span>
                     <h3 className="text-xl font-serif font-bold text-slate-100">{tcProfile.name}'s Academic Dossier</h3>

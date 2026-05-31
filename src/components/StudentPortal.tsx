@@ -427,7 +427,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
               return (
                 <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
                   {/* Header */}
-                  <div className="p-6 bg-slate-900 text-white flex justify-between items-center">
+                  <div className="p-6 bg-[#0B1F3B] text-white flex justify-between items-center">
                     <div>
                       <span className="text-[10px] uppercase font-black tracking-widest text-teal-400 block">{getCourseName(activeQuiz.courseId)}</span>
                       <h4 className="text-lg font-black">{activeQuiz.title}</h4>
@@ -929,7 +929,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
 
                     {payMethodSelect === 'Card' ? (
                       /* Sleek Card Layout */
-                      <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/60 p-5 rounded-2xl text-slate-100 space-y-4">
+                      <div className="bg-gradient-to-br from-[#0B1F3B] to-[#15325c] border border-[#163056] p-5 rounded-2xl text-slate-100 space-y-4">
                         <div className="flex justify-between items-center text-xs">
                           <span className="text-[9px] uppercase tracking-widest text-[#C29B38] font-bold">VISA DEBIT PROCESSOR</span>
                           <CreditCard className="w-6 h-4 text-white" />

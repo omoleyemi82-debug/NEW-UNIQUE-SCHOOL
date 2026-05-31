@@ -76,15 +76,17 @@ export default function StudentDirectorySearch({
       let isMatchedBySearch = true;
       if (queryClean) {
         // High accuracy name matching
-        const matchesName = matchStudentName(student.name, searchQuery);
+        const matchesName = matchStudentName(student.name, searchQuery) || stNameClean.includes(queryClean);
         
         // Passport or meta lookups
         const matchesEmail = stEmailClean.includes(queryClean);
         const matchesId = stIdClean.includes(queryClean);
         const matchesAdm = stAdmClean.includes(queryClean);
         const matchesUsername = stUserClean.includes(queryClean);
+        const matchesClass = (student.gradeLevel || '').toLowerCase().includes(queryClean);
+        const matchesDept = (student.department || '').toLowerCase().includes(queryClean);
 
-        isMatchedBySearch = matchesName || matchesEmail || matchesId || matchesAdm || matchesUsername;
+        isMatchedBySearch = matchesName || matchesEmail || matchesId || matchesAdm || matchesUsername || matchesClass || matchesDept;
       }
 
       // Class matches

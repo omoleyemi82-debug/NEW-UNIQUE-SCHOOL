@@ -1446,7 +1446,7 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
                   </div>
 
                   {payMethod === 'Card' ? (
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-2xl text-slate-200 border border-slate-800 space-y-4">
+                    <div className="bg-gradient-to-br from-[#0B1F3B] to-[#15325c] p-5 rounded-2xl text-slate-200 border border-[#163056] space-y-4">
                       <div className="flex justify-between items-center text-xs">
                         <span className="text-[9.5px] font-black text-[#09A5DB] tracking-widest uppercase">CO-BRANDED DEBIT PROCESSOR</span>
                         <CreditCard className="w-6 h-4 text-white" />
@@ -2133,7 +2133,7 @@ export default function ParentPortal({ activeTab: initialActiveTab }: { activeTa
                 </div>
 
                 <div className="pt-3 border-t border-natural-beige/65 space-y-1.5">
-                  <div className="flex justify-between items-center bg-slate-900 text-[#C29B38] p-3 rounded-xl font-sans mt-2">
+                  <div className="flex justify-between items-center bg-[#0B1F3B] text-[#C29B38] p-3 rounded-xl font-sans mt-2">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#FAF9F5]/70">Amount Paid:</span>
                     <span className="font-mono font-extrabold text-[#C29B38] text-base leading-none">
                       {receiptPopupObj.currency === 'NGN' 

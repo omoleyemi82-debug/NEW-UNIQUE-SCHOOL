@@ -7,8 +7,8 @@ import PortalLayout from './PortalLayout';
 import StudentPortal from './StudentPortal';
 import StaffPortal from './StaffPortal';
 import AdminPortal from './AdminPortal';
-import PortalLayoutProps from './PortalLayout';
 import ParentPortal from './ParentPortal';
+import ProfilePage from './ProfilePage';
 import { useSchool } from '../context/SchoolContext';
 import { 
   BookOpen, 
@@ -36,7 +36,9 @@ import {
   Bell,
   Sparkles,
   Info,
-  Clock
+  Clock,
+  Unlock,
+  Key
 } from 'lucide-react';
 
 export default function LandingPage({ onLoginClick }: { onLoginClick: () => void }) {
@@ -45,15 +47,17 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
     teachers, 
     setRole, 
     students, 
+    parents,
+    admins,
     currentRole, 
     currentUserId,
     schoolName,
     notifications
   } = useSchool();
   
-  // Active Tab: 'home' | 'about' | 'academics' | 'events' | 'contact' | 'portal'
-  const [currentTab, setCurrentTab] = useState<'home' | 'about' | 'academics' | 'events' | 'contact' | 'portal'>(
-    currentRole !== 'guest' ? 'portal' : 'home'
+  // Active Tab: 'home' | 'about' | 'events' | 'gallery' | 'contact' | 'portal' | 'profile'
+  const [currentTab, setCurrentTab] = useState<'home' | 'about' | 'events' | 'gallery' | 'contact' | 'portal' | 'profile'>(
+    'home'
   );
 
   // Active subtab inside member portal
@@ -70,9 +74,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
   const [contactSubmitted, setContactSubmitted] = useState(false);
 
   useEffect(() => {
-    if (currentRole !== 'guest' && currentTab === 'home') {
-      setCurrentTab('portal');
-    } else if (currentRole === 'guest' && currentTab === 'portal') {
+    if (currentRole === 'guest' && currentTab === 'portal') {
       setCurrentTab('home');
     }
   }, [currentRole]);
@@ -103,6 +105,9 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
         setActiveTab={setActivePortalTab}
         onLogout={() => {
           setRole('guest', 'guest');
+          setCurrentTab('home');
+        }}
+        onBackToWebsite={() => {
           setCurrentTab('home');
         }}
       >
@@ -166,14 +171,14 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             </div>
           </button>
 
-          {/* Desktop Links (Muted Cool styling) */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-[#AAB4C0]">
+          {/* New Navigation Menu Items */}
+          <nav className="hidden xl:flex items-center gap-5 text-[11px] font-bold uppercase tracking-widest text-[#AAB4C0]">
             <button 
               onClick={() => setCurrentTab('home')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
                 currentTab === 'home' 
                   ? 'text-[#1E4D8F] border-[#1E4D8F]' 
-                  : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
+                  : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
               }`}
             >
               Home
@@ -181,71 +186,93 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
             <button 
               onClick={() => setCurrentTab('about')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'about' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
+                currentTab === 'about' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
               }`}
             >
               About School
             </button>
             <button 
-              onClick={() => setCurrentTab('academics')}
-              className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'academics' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
-              }`}
-            >
-              Academics
-            </button>
-            <button 
               onClick={() => setCurrentTab('events')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'events' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
+                currentTab === 'events' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
               }`}
             >
-              Events
+              Events & News
+            </button>
+            <button 
+              onClick={() => setCurrentTab('gallery')}
+              className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
+                currentTab === 'gallery' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
+              }`}
+            >
+              Gallery
             </button>
             <button 
               onClick={() => setCurrentTab('contact')}
               className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
-                currentTab === 'contact' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#AAB4C0] hover:text-[#1E4D8F]'
+                currentTab === 'contact' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
               }`}
             >
               Contact Us
             </button>
+            
+            {/* My Dashboard Navigation option */}
+            <button 
+              onClick={() => setCurrentTab('portal')}
+              className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
+                currentTab === 'portal' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
+              }`}
+            >
+              My Dashboard
+            </button>
+            
+            {/* Profile page option */}
+            <button 
+              onClick={() => setCurrentTab('profile')}
+              className={`pb-1 px-1 transition-all border-b-2 cursor-pointer outline-none bg-transparent ${
+                currentTab === 'profile' ? 'text-[#1E4D8F] border-[#1E4D8F]' : 'border-transparent text-[#616D7E] hover:text-[#1E4D8F]'
+              }`}
+            >
+              Profile
+            </button>
+
+            {/* Logout button */}
+            <button 
+              onClick={() => {
+                setRole('guest', 'guest');
+                setCurrentTab('home');
+              }}
+              className="pb-1 px-1 transition-all border-b-2 border-transparent text-[#E74C3C] hover:text-[#C0392B] cursor-pointer outline-none bg-transparent"
+            >
+              Logout
+            </button>
           </nav>
 
-          {/* Auth Trigger */}
-          <div className="flex items-center gap-3">
+          {/* Quick Dashboard Action Shortcut Button (Fallback or Guest) */}
+          <div className="flex items-center gap-2.5">
             {currentRole === 'guest' ? (
               <button
                 onClick={onLoginClick}
-                className="px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-[#1E4D8F] hover:bg-[#1E4D8F]/90 active:scale-95 transition-all rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
+                className="px-5 py-2.5 text-xs font-black uppercase tracking-widest text-[#0B1F3B] bg-white border border-[#E6E9EF] hover:border-[#1E4D8F]/30 active:scale-95 transition-all rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5"
                 id="header-login-btn"
               >
-                <ShieldCheck className="w-4 h-4 text-white" /> Portal Login
+                <ShieldCheck className="w-4 h-4 text-[#1E4D8F]" /> Portal Login
               </button>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2">
                 <button
                   onClick={() => setCurrentTab('portal')}
-                  className="px-4 py-2.5 bg-white border border-[#E6E9EF] hover:border-[#1E4D8F]/30 text-[#1E4D8F] text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-4 py-2 bg-gradient-to-r from-sky-600 to-[#1E4D8F] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:shadow-md transition-all cursor-pointer flex items-center gap-1.5 border border-sky-450/15"
                 >
-                  <Building className="w-3.5 h-3.5" /> Portal Dashboard
-                </button>
-                <button
-                  onClick={() => {
-                    setRole('guest', 'guest');
-                    setCurrentTab('home');
-                  }}
-                  className="px-3 py-2.5 text-xs font-bold uppercase tracking-wider text-[#E74C3C] bg-[#E74C3C]/10 hover:bg-[#E74C3C]/20 rounded-xl cursor-pointer"
-                >
-                  Logout
+                  <Unlock className="w-3 text-white" /> Open Portal
                 </button>
               </div>
             )}
 
-            {/* Hamburger helper toggles */}
+            {/* Hamburger Mobile Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 bg-[#F5F7FA] rounded-xl text-[#1E4D8F] border border-[#E6E9EF]"
+              className="xl:hidden p-2.5 bg-[#F5F7FA] rounded-xl text-[#1E4D8F] border border-[#E6E9EF]"
               title="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -254,54 +281,75 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
 
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation Panel */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 p-4 bg-[#090f1f]/97 grid grid-cols-2 gap-2 animate-fade-in relative z-50">
+          <div className="xl:hidden border-t border-[#E6E9EF] p-4 bg-white grid grid-cols-2 gap-2 animate-fade-in relative z-50">
             <button 
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('home'); }}
-              className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer ${
+                currentTab === 'home' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-50 text-slate-600'
+              }`}
             >
               Home
             </button>
             <button 
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('about'); }}
-              className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer ${
+                currentTab === 'about' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-50 text-slate-600'
+              }`}
             >
               About School
             </button>
             <button 
-              onClick={() => { setMobileMenuOpen(false); setCurrentTab('academics'); }}
-              className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
+              onClick={() => { setMobileMenuOpen(false); setCurrentTab('events'); }}
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer ${
+                currentTab === 'events' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-50 text-slate-600'
+              }`}
             >
-              Academics
+              Events & News
             </button>
             <button 
-              onClick={() => { setMobileMenuOpen(false); setCurrentTab('events'); }}
-              className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
+              onClick={() => { setMobileMenuOpen(false); setCurrentTab('gallery'); }}
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer ${
+                currentTab === 'gallery' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-55 text-slate-600'
+              }`}
             >
-              Events
+              Gallery
             </button>
             <button 
               onClick={() => { setMobileMenuOpen(false); setCurrentTab('contact'); }}
-              className="p-3 rounded-xl hover:bg-slate-900 hover:text-sky-300 text-xs font-bold text-slate-300 uppercase text-center cursor-pointer"
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer ${
+                currentTab === 'contact' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-50 text-slate-600'
+              }`}
             >
-              Contact
+              Contact Us
             </button>
-            {currentRole === 'guest' ? (
-              <button 
-                onClick={() => { setMobileMenuOpen(false); onLoginClick(); }}
-                className="p-3 bg-sky-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest text-center col-span-2 cursor-pointer"
-              >
-                Log In
-              </button>
-            ) : (
-              <button 
-                onClick={() => { setMobileMenuOpen(false); setCurrentTab('portal'); }}
-                className="p-3 bg-slate-900 text-sky-400 border border-slate-800 rounded-xl text-xs font-bold uppercase text-center col-span-2 cursor-pointer"
-              >
-                My Portal
-              </button>
-            )}
+            <button 
+              onClick={() => { setMobileMenuOpen(false); setCurrentTab('portal'); }}
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer ${
+                currentTab === 'portal' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-50 text-slate-600'
+              }`}
+            >
+              My Dashboard
+            </button>
+            <button 
+              onClick={() => { setMobileMenuOpen(false); setCurrentTab('profile'); }}
+              className={`p-3 rounded-xl text-xs font-bold uppercase text-center cursor-pointer col-span-2 ${
+                currentTab === 'profile' ? 'bg-[#1E4D8FA3]/10 text-[#1E4D8F]' : 'hover:bg-slate-50 text-slate-600'
+              }`}
+            >
+              My Profile
+            </button>
+            <button 
+              onClick={() => { 
+                setMobileMenuOpen(false); 
+                setRole('guest', 'guest');
+                setCurrentTab('home');
+              }}
+              className="p-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl text-xs uppercase col-span-2 text-center cursor-pointer"
+            >
+              Logout Securely
+            </button>
           </div>
         )}
       </header>
@@ -355,6 +403,195 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
               </div>
             </div>
 
+          </div>
+        </section>
+      )}
+
+      {/* 
+        MEMBER BULLETIN CONSOLE BOARD 
+        Redirects users after successful login with custom role-specific content
+      */}
+      {currentTab === 'home' && currentRole !== 'guest' && (
+        <section className="py-12 bg-[#F5F7FA] border-y border-[#E6E9EF]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white border border-[#E6E9EF] rounded-3xl p-6 sm:p-8 shadow-sm text-left relative overflow-hidden">
+              <div className="absolute top-0 right-0 h-32 w-32 bg-sky-500/5 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+                
+                {/* User Greeting Block */}
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <img 
+                      src={
+                        currentRole === 'student' 
+                          ? (students.find(s => s.id === currentUserId)?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100')
+                          : currentRole === 'teacher'
+                          ? (teachers.find(t => t.id === currentUserId)?.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100')
+                          : currentRole === 'parent'
+                          ? (parents?.find(p => p.id === currentUserId)?.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100')
+                          : 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100'
+                      } 
+                      alt="Avatar" 
+                      className="w-16 h-16 rounded-2xl object-cover border border-[#1E4D8F]/25 shadow-sm"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';
+                      }}
+                    />
+                    <div className="absolute -bottom-1 -right-1 p-1 bg-[#1E4D8F] text-white rounded-lg border border-white">
+                      <ShieldCheck className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-widest text-[#1E4D8F] block mb-0.5">Logged In Portal Account</span>
+                    <h3 className="text-xl sm:text-2xl font-serif font-black text-[#0B1F3B]">
+                      Welcome back, {
+                        currentRole === 'student' 
+                          ? (students.find(s => s.id === currentUserId)?.name?.split(' ')[0] || 'Academic')
+                          : currentRole === 'teacher'
+                          ? (teachers.find(t => t.id === currentUserId)?.name?.split(' ')[0] || 'Educator')
+                          : currentRole === 'parent'
+                          ? (parents?.find(p => p.id === currentUserId)?.name?.split(' ')[0] || 'Guardian')
+                          : 'System Admin'
+                      }!
+                    </h3>
+                    <p className="text-xs text-slate-500 max-w-xl mt-1 leading-normal">
+                      {currentRole === 'student' && "Prepare for upcoming CBT testing modules, check Continuous Assessment grades, or download reports."}
+                      {currentRole === 'teacher' && "Manage test scores, assignments, record physical attendance, and submit theory exams."}
+                      {currentRole === 'parent' && "Track your child's terminal academic progress, behavior logs, and clear pending school invoices."}
+                      {currentRole === 'admin' && "Compile global term indexes, assign class teachers, and authorize results for publications."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Open Dashboard Button */}
+                <button
+                  onClick={() => setCurrentTab('portal')}
+                  className="px-6 py-4 bg-gradient-to-r from-sky-600 to-[#1E4D8F] hover:from-sky-500 hover:to-[#1E4D8F]/95 text-white font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-md flex items-center gap-2 cursor-pointer border border-sky-400/25 shrink-0 self-stretch md:self-auto justify-center hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <Unlock className="w-4 h-4 text-white" /> Open My Dashboard Portal
+                </button>
+
+              </div>
+
+              <div className="h-px bg-slate-150 my-6" />
+
+              {/* Quick Metrics grid by role */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                
+                {currentRole === 'student' && (() => {
+                  const sRec = students.find(s => s.id === currentUserId);
+                  return (
+                    <>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Grade Stream</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{sRec?.gradeLevel || 'Senior Secondary'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Class Specialization</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{sRec?.department || 'General'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">School Fees Status</span>
+                        <span className={`text-xs font-bold mt-1 block truncate ${sRec?.feesCleared ? 'text-emerald-600' : 'text-[#E74C3C]'}`}>
+                          {sRec?.feesCleared ? 'Fully Paid' : 'Outstanding Settle'}
+                        </span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Roster Rank Progress</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{sRec?.positionInClass ? `Rank Position: #${sRec.positionInClass}` : 'Awaiting Computation'}</span>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {currentRole === 'teacher' && (() => {
+                  const tRec = teachers.find(t => t.id === currentUserId);
+                  return (
+                    <>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Faculty Specialty</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{tRec?.specialty || 'General Science'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Qualifications</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{tRec?.qualification || 'B.Sc Physics'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Assigned Classes</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{tRec?.classes?.join(', ') || 'Senior Streams'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Faculty Seniority</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{tRec?.yearsOfExperience || 3} Years Active</span>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {currentRole === 'parent' && (() => {
+                  const pRec = parents?.find(p => p.id === currentUserId);
+                  const sRec = students.find(s => s.guardianPhone === pRec?.phone) || students[0];
+                  return (
+                    <>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Registered Ward Student</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{sRec?.name || 'Julian Alvarez'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Ward Stream Class</span>
+                        <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{sRec?.gradeLevel || 'SS1'}</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Academic Standing</span>
+                        <span className="text-xs font-bold text-emerald-600 mt-1 block truncate">74.2% Class Average</span>
+                      </div>
+                      <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                        <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Invoice Deficit balance</span>
+                        <span className={`text-xs font-bold mt-1 block truncate ${sRec?.feesCleared ? 'text-emerald-600' : 'text-[#E74C3B]'}`}>
+                          {sRec?.feesCleared ? '₦0.00 (Cleared)' : '₦45,000.00'}
+                        </span>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {currentRole === 'admin' && (
+                  <>
+                    <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                      <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Active Student Licenses</span>
+                      <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{students.length} Accounts</span>
+                    </div>
+                    <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                      <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Certified Core Instructors</span>
+                      <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{teachers.length} Faculty Members</span>
+                    </div>
+                    <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                      <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Term Specializations</span>
+                      <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">18 Core Curriculums</span>
+                    </div>
+                    <div className="p-4 bg-[#F5F7FA] border border-[#E6E9EF] rounded-2xl">
+                      <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Approval Registers</span>
+                      <span className="text-xs font-bold text-[#0B1F3B] mt-1 block truncate">{notifications.length || 2} Updates Live</span>
+                    </div>
+                  </>
+                )}
+
+              </div>
+              
+              <div className="mt-5 flex justify-end gap-3 text-[10px] font-mono text-slate-400">
+                <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Database Verified Session</span>
+                <span>•</span>
+                <button
+                  onClick={() => setCurrentTab('profile')}
+                  className="hover:text-[#1E4D8F] font-bold underline bg-transparent border-none cursor-pointer p-0"
+                >
+                  Manage Security Profile Settings & Password →
+                </button>
+              </div>
+
+            </div>
           </div>
         </section>
       )}
@@ -697,9 +934,49 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
 
       {/* Dynamic Subpages Routing */}
       {currentTab === 'about' && <AboutUsPage />}
-      {currentTab === 'academics' && <AcademicsPage />}
       {currentTab === 'events' && <EventsPage />}
+      {currentTab === 'gallery' && (
+        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 text-left animate-fade-in">
+          <div className="text-center space-y-2 mb-8">
+            <span className="text-[10px] text-[#1E4D8F] uppercase font-black tracking-widest block font-mono">NEW UNIQUE ACADEMY FACILITY FRAME</span>
+            <h2 className="text-2xl sm:text-4xl font-serif font-black text-[#0B1F3B] uppercase tracking-wide">Campus Photographic Archive</h2>
+            <p className="text-xs text-slate-400">Authentic highlights representing classrooms, chemistry laboratories, sporting grounds, and computer reference decks.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { url: "/front_page.png", label: "School Front Entrance Field", caption: "Safe security-patrolled access coordinates with physical administrative structures." },
+              { url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80", label: "Biology Chemistry Practical Lab", caption: "High-grade reagents, chemical storage systems, testing cylinders, and microscope rigs." },
+              { url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&auto=format&fit=crop&q=80", label: "Senior Secondary Lesson Work", caption: "Comfortable spacious seating modules, modern blackboards, and student writing stations." },
+              { url: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80", label: "Resource Library Desks", caption: "Comprehensive curriculum books, research texts, literature novels, and quiet reading desks." },
+              { url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600&auto=format&fit=crop&q=80", label: "Secondary Computing Station", caption: "Digital processing terminals, programming syllabus sheets, and internet testing grids." },
+              { url: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&auto=format&fit=crop&q=80", label: "Sports Field & Recreation", caption: "Healthy competitive arenas, track races, inter-house sports sportsmanship, and football units." }
+            ].map((img, id) => (
+              <div key={id} className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm group">
+                <div className="relative overflow-hidden h-52">
+                  <img 
+                    src={img.url} 
+                    alt={img.label} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent flex items-end p-4">
+                    <span className="text-white text-xs font-black uppercase tracking-wider">{img.label}</span>
+                  </div>
+                </div>
+                <div className="p-5 text-left bg-white">
+                  <p className="text-[11px] text-slate-550 leading-normal">{img.caption}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
       {currentTab === 'contact' && <ContactUsPage />}
+      {currentTab === 'profile' && <ProfilePage />}
 
       {currentTab === 'portal' && currentRole === 'guest' && (
         <div className="max-w-md mx-auto px-4 py-20 text-center space-y-6">

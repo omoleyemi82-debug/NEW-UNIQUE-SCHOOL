@@ -14,7 +14,9 @@ import {
   Activity,
   ChevronsUpDown,
   BookOpen,
-  CreditCard
+  CreditCard,
+  ArrowLeft,
+  Globe
 } from 'lucide-react';
 
 interface PortalLayoutProps {
@@ -22,9 +24,10 @@ interface PortalLayoutProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   onLogout: () => void;
+  onBackToWebsite?: () => void;
 }
 
-export default function PortalLayout({ children, activeTab, setActiveTab, onLogout }: PortalLayoutProps) {
+export default function PortalLayout({ children, activeTab, setActiveTab, onLogout, onBackToWebsite }: PortalLayoutProps) {
   const { currentRole, currentUserId, students, teachers, setRole } = useSchool();
 
   // Automatic logout on inactivity (15 Minutes)
@@ -151,6 +154,15 @@ export default function PortalLayout({ children, activeTab, setActiveTab, onLogo
 
         {/* Navigation Core Links */}
         <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
+          {onBackToWebsite && (
+            <button
+              onClick={onBackToWebsite}
+              className="w-full text-white bg-gradient-to-r from-sky-600 to-[#1E4D8F] hover:from-sky-500 hover:to-[#1E4D8F]/90 flex items-center gap-2.5 px-3.5 py-3 text-xs font-black uppercase tracking-widest cursor-pointer rounded-xl transition-all mb-4 border border-sky-400/25 shadow-md hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <ArrowLeft className="w-4 h-4 shrink-0 text-white" />
+              <span>School Website</span>
+            </button>
+          )}
           {currentNav.map((link) => {
             const Icon = link.icon;
             const active = activeTab === link.id;

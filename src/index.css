@@ -220,3 +220,68 @@ body {
   border-color: #E6E9EF !important;
   color: #0B1F3B !important;
 }
+
+/* ==========================================================
+   TEXT VISIBILITY, SUFFICIENT CONTRAST & COLOR SECURITY RULES
+   ========================================================== */
+
+/* 1. Global Headings and Paragraph Rules on Light Backgrounds */
+main {
+  color: #333333 !important;
+}
+
+main h1, main h2, main h3, main h4, main h5, main h6 {
+  color: #0B1F3B !important;
+}
+
+/* Landing Page & Secondary Non-Hero Sections Contrast Lock */
+.landing-page-wrapper section:not(.hero-gradient-box) p, 
+.landing-page-wrapper section:not(.hero-gradient-box) li,
+.landing-page-wrapper section:not(.hero-gradient-box) div:not(.bg-[#0B1F3B]):not(.bg-slate-900) {
+  color: #333333;
+}
+
+.landing-page-wrapper section:not(.hero-gradient-box) h1,
+.landing-page-wrapper section:not(.hero-gradient-box) h2,
+.landing-page-wrapper section:not(.hero-gradient-box) h3,
+.landing-page-wrapper section:not(.hero-gradient-box) h4,
+.landing-page-wrapper section:not(.hero-gradient-box) h5,
+.landing-page-wrapper section:not(.hero-gradient-box) h6 {
+  color: #0B1F3B !important;
+}
+
+/* 2. Specific Auto-Contrast Fixes for Mapped White Background Containers */
+.bg-white .text-white,
+.bg-slate-900 .text-white,
+.bg-slate-950 .text-white,
+.bg-natural-light .text-white,
+.bg-slate-900 .text-slate-100,
+.bg-slate-950 .text-slate-100,
+.bg-white .text-slate-100 {
+  color: #0B1F3B !important;
+}
+
+.bg-white .text-slate-205,
+.bg-white .text-slate-200,
+.bg-white .text-slate-300,
+.bg-slate-900 .text-slate-205,
+.bg-slate-900 .text-slate-200,
+.bg-slate-900 .text-slate-300,
+.bg-slate-950 .text-slate-205,
+.bg-slate-950 .text-slate-200,
+.bg-slate-950 .text-slate-300 {
+  color: #333333 !important;
+}
+
+/* Ensure that input place-holders inside light panels remain dark and highly legible */
+main input::placeholder {
+  color: #5D6B7E !important;
+}
+
+/* Prevent text/background color conflicts in mobile drawers or panels */
+@media (max-width: 768px) {
+  main, .landing-page-wrapper {
+    text-shadow: none !important;
+  }
+}
+
