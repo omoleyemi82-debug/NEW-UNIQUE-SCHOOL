@@ -1115,7 +1115,7 @@ export default function StudentPortal({ activeTab, isParentView = false }: { act
                       </div>
                       <div className="flex justify-between text-natural-charcoal/50">
                         <span>Physical Zone:</span>
-                        <span className="font-medium">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
+                        <span className="font-medium">1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
                       </div>
                     </div>
                   </div>

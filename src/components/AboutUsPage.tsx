@@ -5,7 +5,7 @@ export default function AboutUsPage() {
   const milestones = [
     { year: '2015', title: 'School Foundation', desc: 'NEW UNIQUE ACADEMY was established as a premier Christian secondary school dedicated to high moral values, academic integrity, and sound preparation for higher education.' },
     { year: '2019', title: 'Official Accreditation', desc: 'Received state ministry approvals for both Junior and Senior School Certifications across Science, Art, and Commerce streams.' },
-    { year: '2022', title: 'Main Campus Transition', desc: 'Moved teaching activities to our purpose-built permanent campus Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria, upgrading science laboratories and computing stations.' },
+    { year: '2022', title: 'Main Campus Transition', desc: 'Moved teaching activities to our purpose-built permanent campus at 1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria, upgrading science laboratories and computing stations.' },
     { year: '2025', title: 'Administrative Portal Launch', desc: 'Introduced the secure digital portal software to synchronize lesson plans, results processing, attendance registers, and parent-teacher handshakes.' }
   ];
 

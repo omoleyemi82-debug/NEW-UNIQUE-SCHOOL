@@ -46,7 +46,8 @@ import {
   setDoc, 
   getDocs, 
   deleteDoc, 
-  updateDoc 
+  updateDoc,
+  onSnapshot
 } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 
@@ -191,6 +192,8 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Load from Firestore and seed if empty
   useEffect(() => {
+    let unsubs: (() => void)[] = [];
+    
     const initializeDatabase = async () => {
       try {
         const userSnapshot = await getDocs(collection(db, 'users'));
@@ -434,6 +437,63 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setTerms(configData.terms || []);
         setStaffClassroomPermissionState(!!configData.staffClassroomPermission);
 
+        // --- Real-time Snapshots Setup ---
+        const unsubUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setAdmins(list.filter(u => u.role === 'admin' || u.role === 'super_admin'));
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'users'));
+        unsubs.push(unsubUsers);
+
+        const unsubStudents = onSnapshot(collection(db, 'students'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setStudents(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'students'));
+        unsubs.push(unsubStudents);
+
+        const unsubTeachers = onSnapshot(collection(db, 'teachers'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setTeachers(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'teachers'));
+        unsubs.push(unsubTeachers);
+
+        const unsubParents = onSnapshot(collection(db, 'parents'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setParents(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'parents'));
+        unsubs.push(unsubParents);
+
+        const unsubPaymentRecords = onSnapshot(collection(db, 'payment_records'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setPaymentRecords(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'payment_records'));
+        unsubs.push(unsubPaymentRecords);
+
+        const unsubNotifications = onSnapshot(collection(db, 'school_notifications'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setNotifications(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'school_notifications'));
+        unsubs.push(unsubNotifications);
+
+        const unsubMessages = onSnapshot(collection(db, 'school_messages'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setMessages(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'school_messages'));
+        unsubs.push(unsubMessages);
+
+        const unsubEvents = onSnapshot(collection(db, 'events'), (snapshot) => {
+          const list: any[] = [];
+          snapshot.forEach(d => list.push(d.data()));
+          setEvents(list);
+        }, (err) => handleFirestoreError(err, OperationType.GET, 'events'));
+        unsubs.push(unsubEvents);
+
         setLoading(false);
       } catch (err) {
         console.error("Failed loading databases:", err);
@@ -442,6 +502,10 @@ export const SchoolProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     initializeDatabase();
+
+    return () => {
+      unsubs.forEach(unsub => unsub());
+    };
   }, []);
 
   // Sync active authentication token to client cache

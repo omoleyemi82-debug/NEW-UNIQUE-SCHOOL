@@ -853,21 +853,23 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                   <MapPin className="w-5 h-5 text-sky-400" />
                   <div>
                     <span className="text-[8.5px] text-slate-500 block uppercase tracking-wide">Campus Address</span>
-                    <span className="text-xs font-bold text-slate-200">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
+                    <span className="text-xs font-bold text-slate-200">1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-sky-400" />
+                  <Mail className="w-5 h-5 text-sky-450" />
                   <div>
                     <span className="text-[8.5px] text-slate-500 block uppercase tracking-wide">Inquiry Email</span>
                     <a href="mailto:omoleyemi82@gmail.com" className="text-xs font-bold leading-none hover:underline text-sky-400">omoleyemi82@gmail.com</a>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-sky-400" />
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-sky-400 mt-0.5" />
                   <div>
-                    <span className="text-[8.5px] text-slate-500 block uppercase tracking-wide">Administrative Office Line</span>
-                    <span className="text-xs font-bold leading-none text-slate-200">+1 (555) 304-4000</span>
+                    <span className="text-[8.5px] text-slate-500 block uppercase tracking-wide">Administrative Hotlines</span>
+                    <span className="text-xs font-bold leading-normal text-slate-200 block">
+                      08032296504 • 08110475259
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1012,8 +1014,9 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
           </div>
           <div className="space-y-1.5">
             <span className="text-slate-100 font-extrabold block uppercase tracking-widest text-[9.5px]">Campus General Registrar</span>
-            <p className="text-slate-350">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</p>
+            <p className="text-slate-350 leading-relaxed">1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</p>
             <p className="text-sky-400 font-bold">omoleyemi82@gmail.com</p>
+            <p className="text-slate-400 text-[10px] font-mono">08032296504 • 08110475259</p>
           </div>
           <div className="space-y-3.5 md:text-right">
             <p>© 2026 NEW UNIQUE ACADEMY. All rights reserved.</p>
@@ -1085,7 +1088,7 @@ export default function LandingPage({ onLoginClick }: { onLoginClick: () => void
                   </div>
                   <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl">
                     <span className="font-extrabold text-white block mb-1 uppercase tracking-wide text-[10px]">Q: Where is the campus located?</span>
-                    <p className="text-[10.5px] text-slate-400">Our physical secondary school campus is situated Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria. High-grade science laboratory stations, Christian fellowship centers, and academic libraries are configured locally.</p>
+                    <p className="text-[10.5px] text-slate-400">Our physical secondary school campus is situated at 1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria. High-grade science laboratory stations, Christian fellowship centers, and academic libraries are configured locally.</p>
                   </div>
                   <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl">
                     <span className="font-extrabold text-white block mb-1 uppercase tracking-wide text-[10px]">Q: What streams are available?</span>

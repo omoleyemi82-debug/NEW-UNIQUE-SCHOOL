@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MessageSquare, MapPin, Clock, CheckCircle2, ChevronRight, AlertCircle } from 'lucide-react';
+import { Mail, MessageSquare, MapPin, Clock, CheckCircle2, ChevronRight, AlertCircle, Phone, PhoneCall } from 'lucide-react';
 
 export default function ContactUsPage() {
   const [ticketName, setTicketName] = useState('');
@@ -44,7 +44,7 @@ export default function ContactUsPage() {
       </section>
 
       {/* Highlights info panels */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left animate-fade-in">
         
         {/* Card 1 */}
         <div className="bg-slate-900 p-6 rounded-3xl border border-slate-800 flex items-start gap-4">
@@ -54,7 +54,7 @@ export default function ContactUsPage() {
           <div className="space-y-1.5 flex-1 min-w-0">
             <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest block font-mono">Primary Email Desk</span>
             <a href="mailto:omoleyemi82@gmail.com" className="font-serif font-bold text-sm text-white hover:underline truncate block">omoleyemi82@gmail.com</a>
-            <span className="text-[10.5px] text-slate-400 block leading-relaxed leading-normal">Submit general inquiries or curriculum pathways questions.</span>
+            <span className="text-[10.5px] text-slate-400 block leading-normal">Submit general inquiries or curriculum pathways questions.</span>
           </div>
         </div>
 
@@ -65,12 +65,27 @@ export default function ContactUsPage() {
           </div>
           <div className="space-y-1.5 flex-1 min-w-0">
             <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest block font-mono">Physical Coordinates</span>
-            <span className="font-serif font-bold text-sm text-white block">Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria</span>
+            <span className="font-serif font-bold text-xs text-white block leading-snug">1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Nigeria</span>
             <span className="text-[10.5px] text-slate-400 block leading-relaxed">Visits permitted specifically during school working hours by appointment.</span>
           </div>
         </div>
 
         {/* Card 3 */}
+        <div className="bg-slate-900 p-6 rounded-3xl border border-slate-800 flex items-start gap-4">
+          <div className="p-3 bg-slate-950 text-sky-400 rounded-2xl shrink-0 border border-slate-850">
+            <Phone className="w-5 h-5" />
+          </div>
+          <div className="space-y-1.5 flex-1 min-w-0">
+            <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest block font-mono">Admin Hotlines</span>
+            <span className="font-serif font-bold text-xs text-white block space-y-0.5">
+              <a href="tel:08032296504" className="hover:underline hover:text-sky-400 block font-bold">08032296504</a>
+              <a href="tel:08110475259" className="hover:underline hover:text-sky-400 block font-bold">08110475259</a>
+            </span>
+            <span className="text-[10.5px] text-slate-400 block leading-relaxed">Call desk for swift response on admission entries.</span>
+          </div>
+        </div>
+
+        {/* Card 4 */}
         <div className="bg-slate-900 p-6 rounded-3xl border border-slate-800 flex items-start gap-4">
           <div className="p-3 bg-slate-950 text-sky-400 rounded-2xl shrink-0 border border-slate-850">
             <Clock className="w-5 h-5" />
@@ -82,6 +97,61 @@ export default function ContactUsPage() {
           </div>
         </div>
 
+      </section>
+
+      {/* Google Maps & Campus Navigation */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-left animate-fade-in">
+        <div className="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-lg">
+          <div className="lg:col-span-5 space-y-6">
+            <div className="space-y-2">
+              <span className="text-[10px] text-sky-400 font-bold uppercase tracking-widest block font-mono">Location & Access</span>
+              <h3 className="text-2xl font-serif font-black text-white uppercase tracking-wider">Campus Map & Directions</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                New Unique Academy is located in Fiyinfolu Estate, providing a secure, quiet, and conducive environment for senior and junior academic learning.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="p-4 bg-slate-950 border border-slate-850 rounded-2xl">
+                <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest block font-mono mb-1">Administrative Address</span>
+                <span className="text-xs font-bold text-white block leading-relaxed">
+                  1, Zone C, Fiyinfolu Estate, Off Ilawe Road, Ado-Ekiti, Ekiti State, Nigeria
+                </span>
+              </div>
+              <div className="p-4 bg-slate-950 border border-slate-850 rounded-2xl">
+                <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest block font-mono mb-1">Direct Help Desk Hotlines</span>
+                <span className="text-xs font-bold text-white block font-mono">
+                  08032296504 • 08110475259
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <a href="tel:08032296504" className="flex items-center justify-center gap-2 px-4 py-3 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition duration-200">
+                <PhoneCall className="w-3.5 h-3.5" /> Call Main Desk
+              </a>
+              <a href="https://wa.me/2348032296504" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition duration-200">
+                <MessageSquare className="w-3.5 h-3.5" /> WhatsApp Desk
+              </a>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=1,+Zone+C,+Fiyinfolu+Estate,+Off+Ilawe+Road,+Ado-Ekiti,+Ekiti+State,+Nigeria" target="_blank" rel="noopener noreferrer" className="col-span-2 flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white border border-slate-750 font-extrabold text-xs uppercase tracking-wider rounded-xl transition duration-200">
+                Get Campus Directions
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 h-[350px] w-full rounded-2xl overflow-hidden border border-slate-850 relative bg-slate-950">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.514417743152!2d5.1979434!3d7.6059881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1047fa36dfa5996b%3A0x8ff62d10c0e5a62e!2sIlawe%20Rd%2C%20Ado%20Ekiti!5e0!3m2!1sen!2sng!4v1717800000000!5m2!1sen!2sng" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+        </div>
       </section>
 
       {/* Form Area */}
